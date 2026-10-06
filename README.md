@@ -46,6 +46,42 @@ Agar setiap anggota bisa bebas mendesain UI, menambah logika, dan mengeksplorasi
 
 ---
 
+## 🎨 Standar Desain UI & Palet Warna (Color Palette)
+
+Agar seluruh tampilan web seragam dan estetis (bertema ramah lingkungan & sosial), gunakan standar warna berikut yang **sudah terkonfigurasi di `tailwind.config.js`**:
+
+| Preview | Nama Warna | Kode Hex | Class Tailwind | Panduan & Peran Desain |
+| :---: | :--- | :--- | :--- | :--- |
+| 🟢 | **Dark Green** | `#355834` | `bg-dark-green`, `text-dark-green` | **Warna Utama**: Header, navbar, teks judul, tombol utama (*Primary Button*). |
+| 🌿 | **Sage Green** | `#7BAE7F` | `bg-sage`, `text-sage`, `border-sage` | **Warna Pendukung**: Tombol sekunder, hover state, badge aktif, card border. |
+| 🌾 | **Cream** | `#F8F4E8` | `bg-cream`, `text-cream` | **Background Utama**: Warna latar belakang halaman/web agar tidak silau. |
+| 🪵 | **Warm Brown** | `#8B6F47` | `bg-warm-brown`, `text-warm-brown` | **Aksen Hangat**: Label kategori, footer, garis aksen, badge info posko. |
+| ⚪ | **White** | `#FFFFFF` | `bg-white`, `text-white` | **Latar Konten**: Background kartu (*card*), modal box, input form, teks tombol gelap. |
+
+### Contoh Penggunaan Class Tailwind di Blade:
+```html
+<!-- Background Halaman -->
+<div class="min-h-screen bg-cream text-gray-800">
+
+    <!-- Tombol Utama (Primary Button) -->
+    <button class="bg-dark-green text-white px-4 py-2 rounded-lg hover:bg-sage transition">
+        Donasikan Sekarang
+    </button>
+
+    <!-- Tombol Sekunder / Aksen -->
+    <button class="bg-sage text-white px-4 py-2 rounded-lg hover:bg-dark-green transition">
+        Lihat Posko
+    </button>
+
+    <!-- Kartu Konten (Card) -->
+    <div class="bg-white rounded-xl shadow-sm border border-sage/30 p-6">
+        <h3 class="text-xl font-bold text-dark-green">Nama Posko</h3>
+        <p class="text-warm-brown font-medium">Banyumas, Jawa Tengah</p>
+    </div>
+</div>
+```
+---
+
 ## 📂 Bagian File, Langkah Kerja & Ruang Kreasi Per Anggota
 
 ### 1. Afif Nur Rahman — Modul Donasi Pakaian & Hak Akses (RBAC)
