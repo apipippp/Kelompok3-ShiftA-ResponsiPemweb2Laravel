@@ -291,76 +291,194 @@ git push -u origin main
 
 ---
 
-### Tahap B: Setup di Laptop Anggota (Khusus Nurul & Faizal)
+### Tahap B: Panduan Lengkap Setup di Laptop Anggota (Khusus Nurul & Faizal)
 
-Setelah menerima undangan di email/GitHub, jalankan perintah ini di laptop masing-masing:
+Ikuti panduan langkah demi langkah ini dari awal sampai proyek siap dijalankan di laptop kalian:
 
+#### 1. Terima Undangan Kolaborator GitHub (Wajib Pertama Kali!)
+> ⚠️ **PENTING:** Jika kalian belum klik accept invitation, kalian **TIDAK AKAN BISA** melakukan `git push` nanti (akan error *Permission denied / 403*).
+1. Buka email kalian atau langsung buka browser ke alamat:
+   👉 **[https://github.com/apipippp/PemwebII-LemariPeduli/invitations](https://github.com/apipippp/PemwebII-LemariPeduli/invitations)**
+2. Pastikan sudah login ke akun GitHub masing-masing.
+3. Klik tombol hijau **Accept invitation**.
+
+---
+
+#### 2. Clone Repository ke Komputer Lokal
+Buka terminal (Git Bash, Command Prompt, atau Terminal VS Code) di folder tempat kalian biasa menyimpan tugas kuliah:
 ```bash
-# 1. Clone repository
 git clone https://github.com/apipippp/PemwebII-LemariPeduli.git
 cd PemwebII-LemariPeduli
-
-# 2. Pasang dependencies
-composer install
-npm install
-
-# 3. Buat file .env dan generate app key
-cp .env.example .env
-php artisan key:generate
-php artisan storage:link
-
-# 4. Konfigurasi database di file .env:
-#    DB_DATABASE=lemari_peduli
-#    DB_USERNAME=root
-#    DB_PASSWORD=
-# (Pastikan sudah buat database kosong bernama 'lemari_peduli' di phpMyAdmin)
-
-# 5. Jalankan migration awal
-php artisan migrate
-
-# 6. Jalankan server pengujian
-php artisan serve
-npm run dev
 ```
 
 ---
 
-### Tahap C: SOP Alur Kerja Git Harian (Pengerjaan Fitur)
+#### 3. Install Dependensi (Composer & NPM)
+Karena folder `vendor` dan `node_modules` sengaja diabaikan oleh Git, kalian wajib menginstalnya di lokal:
+```bash
+# Install library backend Laravel
+composer install
 
+# Install library frontend & Tailwind CSS
+npm install
 ```
-(Local Branch Kamu) ──> git push ──> (Remote Branch Kamu) ──> Pull Request & Merge ──> (main)
-```
 
-1. **Selalu buat branch baru sebelum ngoding:**
-   - Afif: `git checkout -b feat/donasi-afif`
-   - Nurul: `git checkout -b feat/posko-nurul`
-   - Faizal: `git checkout -b feat/penyaluran-faizal`
+---
 
-2. **Koding fitur masing-masing di file miliknya.**
-
-3. **Commit dan push branch sendiri:**
+#### 4. Konfigurasi Environment (`.env`) & Storage
+1. Salin template `.env.example` menjadi file `.env`:
    ```bash
-   git add .
-   git commit -m "feat: membuat tampilan form dan logika controller posko"
-   git push origin feat/posko-nurul
+   # Di Windows (Git Bash / PowerShell / CMD):
+   cp .env.example .env
+   ```
+2. Buat kunci keamanan aplikasi (*Application Key*):
+   ```bash
+   php artisan key:generate
+   ```
+3. Hubungkan folder publik ke storage (wajib agar gambar posko / bukti donasi bisa tampil):
+   ```bash
+   php artisan storage:link
    ```
 
-4. **Buka GitHub dan Buat Pull Request (PR):**
-   - Klik tombol hijau **Compare & pull request**.
-   - Beri keterangan fitur yang baru dibuat.
-   - Klik **Merge pull request** $\rightarrow$ **Confirm merge**.
+---
 
-5. **Sinkronisasi Kode Sebelum Ngoding Lagi di Hari Berikutnya:**
-   Sebelum melanjutkan koding, pastikan mengambil kodingan teman yang sudah masuk ke `main`:
+#### 5. Siapkan Database MySQL Lokal
+1. Buka aplikasi **XAMPP** atau **Laragon**, pastikan service **MySQL** sudah dinyalakan (*Start*).
+2. Buka browser dan masuk ke phpMyAdmin: `http://localhost/phpmyadmin`.
+3. Klik menu **Databases** / **Basis Data**, ketik nama: `lemari_peduli`, lalu klik **Create**.
+4. Buka file `.env` di VS Code masing-masing, pastikan baris database sudah sesuai:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=lemari_peduli
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+   *(Jika MySQL kalian memakai password, sesuaikan `DB_PASSWORD`)*.
+5. Jalankan migrasi tabel awal:
    ```bash
-   git checkout main
-   git pull origin main
-   git checkout <nama-branch-kamu>
-   git merge main
    php artisan migrate
    ```
 
 ---
+
+#### 6. Menjalankan Server Aplikasi
+Buka **dua tab terminal** di VS Code pada folder proyek:
+* **Terminal 1** (Server Laravel):
+  ```bash
+  php artisan serve
+  ```
+* **Terminal 2** (Compiler Frontend Vite):
+  ```bash
+  npm run dev
+  ```
+Buka browser di alamat `http://127.0.0.1:8000`. Jika halaman selamat datang Laravel dan tombol **Log in** & **Register** muncul, setup awal berhasil 100%!
+
+---
+
+### Tahap C: Alur Lengkap Dari Mulai Koding Sampai Nge-Push ke GitHub (Nurul & Faizal)
+
+> ⚠️ **HUKUM UTAMA:** JANGAN PERNAH MENGETIK KODE ATAU COMMIT DI BRANCH `main`. Selalu gunakan branch fitur masing-masing agar pekerjaan kalian aman dan tidak tertimpa.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                             ALUR SIKLUS FITUR                               │
+│                                                                             │
+│  1. git checkout -b feat/nama-fitur   (Buat branch baru)                    │
+│  2. Koding fitur & tes di browser                                           │
+│  3. git add . && git commit -m "..." (Simpan progres)                       │
+│  4. git push origin feat/nama-fitur   (Kirim ke GitHub)                     │
+│  5. Buka GitHub Web -> Create Pull Request -> Merge                         │
+│  6. Balik ke main -> git pull origin main (Ambil update terbaru)            │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Langkah 1: Buat Branch Baru Sebelum Mengetik Kode
+Sebelum mengedit file apapun, buat branch baru sesuai tugas kalian:
+* **Nurul**:
+  ```bash
+  git checkout -b feat/posko-nurul
+  ```
+* **Faizal**:
+  ```bash
+  git checkout -b feat/penyaluran-faizal
+  ```
+* *Cara cek kalian sedang di branch mana:*
+  ```bash
+  git branch
+  ```
+  *(Pastikan tanda bintang `*` berada di branch fitur kalian, bukan di `main`)*.
+
+---
+
+#### Langkah 2: Koding Fitur di File Milik Sendiri
+- Kerjakan file Model, Migration, Controller, dan Blade sesuai pembagian tugas di atas (Zona Mandiri).
+- Jika membuat migrasi database baru:
+  ```bash
+  php artisan migrate
+  ```
+
+---
+
+#### Langkah 3: Simpan Progres (Commit) dan Kirim ke GitHub (Push)
+Jika kodingan sudah selesai atau ingin menyimpan progres:
+1. Cek file apa saja yang berubah:
+   ```bash
+   git status
+   ```
+2. Tambahkan semua perubahan ke daftar siap simpan (*staging*):
+   ```bash
+   git add .
+   ```
+3. Simpan dengan pesan jelas:
+   ```bash
+   git commit -m "feat: membuat tampilan form dan logika controller posko"
+   ```
+4. Kirim branch kalian ke GitHub:
+   * **Nurul**:
+     ```bash
+     git push origin feat/posko-nurul
+     ```
+   * **Faizal**:
+     ```bash
+     git push origin feat/penyaluran-faizal
+     ```
+   *(Jika diminta login GitHub di browser, klik **Authorize / Sign in with Browser**)*.
+
+---
+
+#### Langkah 4: Buat Pull Request (PR) & Gabungkan ke `main` (Lewat Web GitHub)
+1. Buka browser ke repository:
+   👉 **[https://github.com/apipippp/PemwebII-LemariPeduli](https://github.com/apipippp/PemwebII-LemariPeduli)**
+2. Kalian akan melihat kotak kuning bertuliskan:
+   > *"feat/posko-nurul had recent pushes"* $\rightarrow$ Klik tombol hijau **Compare & pull request**.
+3. Beri deskripsi singkat tentang apa saja yang baru dibuat.
+4. Klik tombol hijau **Create pull request**.
+5. Setelah halaman me-refresh, klik tombol hijau **Merge pull request** $\rightarrow$ klik **Confirm merge**.
+6. Status akan berubah menjadi ungu (**Merged**). Kode kalian sekarang sudah resmi masuk ke branch utama (`main`)!
+
+---
+
+#### Langkah 5: Rutinitas Sebelum Mulai Koding di Hari Berikutnya (Ambil Update Teman)
+Setiap kali kalian atau teman selesai menggabungkan fitur ke `main`, lakukan langkah ini di laptop kalian sebelum mulai ngoding lagi:
+
+```bash
+# 1. Pindah ke branch main
+git checkout main
+
+# 2. Tarik update terbaru dari teman yang sudah ada di GitHub
+git pull origin main
+
+# 3. Pindah kembali ke branch fitur kalian
+git checkout <nama-branch-kalian>
+
+# 4. Satukan perubahan terbaru dari main ke dalam branch kalian
+git merge main
+
+# 5. Jika teman kalian menambahkan tabel baru di database, jalankan:
+php artisan migrate
+```
 
 ## 🎯 Panduan Persiapan Presentasi & Penguasaan Materi
 
