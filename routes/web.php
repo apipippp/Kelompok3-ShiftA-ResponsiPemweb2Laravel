@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Route;
 // 1. RUTE PUBLIK (Bebas diakses pengunjung / tanpa login)
 // =========================================================================
 Route::get('/', function () {
-    return view('welcome');
+    $totalClothing = \App\Models\Donation::where('status', '!=', 'dibatalkan')->sum('quantity');
+    $totalDonors = \App\Models\User::where('role', 'donatur')->count();
+    $recentDonations = \App\Models\Donation::where('status', '!=', 'dibatalkan')->latest()->take(3)->get();
+    return view('welcome', compact('totalClothing', 'totalDonors', 'recentDonations'));
 })->name('home');
 
 // Cek Resi / Tracking Donasi Publik
