@@ -20,7 +20,8 @@ Agar setiap anggota bisa bebas mendesain UI, menambah logika, dan mengeksplorasi
 │ • Model Donation     │ • Model DropPoint    │ • Model Distribution          │
 │ • views/donations/*  │ • views/drop_points/*│ • views/distributions/*       │
 │ • migration donations│ • migration drop_pts │ • views/welcome.blade.php     │
-│                      │                      │ • IsAdmin Middleware & Seeder │
+│ • IsAdmin Middleware │                      │ • Dashboard Analytics/Statistik│
+│ • UserSeeder (RBAC)  │                      │                               │
 └──────────────────────┴──────────────────────┴───────────────────────────────┘
                                        │
                                        ▼
@@ -39,37 +40,43 @@ Agar setiap anggota bisa bebas mendesain UI, menambah logika, dan mengeksplorasi
 
 | NIM | Nama | Modul Utama | Tanggung Jawab & Fitur | Branch Git |
 | :--- | :--- | :--- | :--- | :--- |
-| **H1H024016** | **Afif Nur Rahman** *(Lead)* | **Donasi Pakaian** | • Inisiasi Project Laravel & Breeze<br>• CRUD Pengajuan Donasi Baju<br>• Upload foto pakaian & validasi file<br>• Sistem tracking status tiket donasi | `feat/donasi-afif` |
+| **H1H024016** | **Afif Nur Rahman** *(Lead)* | **Donasi Pakaian & RBAC** | • Inisiasi Project Laravel & Breeze<br>• Setup RBAC (Middleware `IsAdmin` & UserSeeder)<br>• CRUD Pengajuan Donasi Baju<br>• Upload foto pakaian & tracking tiket donasi | `feat/donasi-afif` |
 | **H1H024002** | **Nurul Maftuhah** | **Posko Drop-Off** | • CRUD Titik Posko Pengumpulan Baju<br>• Informasi alamat, kontak PIC, jam operasional<br>• Tampilan katalog posko untuk donatur publik<br>• Upload foto posko / integrasi Google Maps | `feat/posko-nurul` |
-| **H1H024003** | **Muhammad Faizal Khabibi** | **Penyaluran, RBAC & Landing Page** | • Setup Middleware `IsAdmin` & User Seeder<br>• CRUD Laporan Penyaluran Bantuan<br>• Upload foto dokumentasi serah terima<br>• Desain Landing Page Publik (`welcome.blade.php`) | `feat/penyaluran-faizal` |
+| **H1H024003** | **Muhammad Faizal Khabibi** | **Penyaluran, Dashboard & Landing Page** | • CRUD Laporan Penyaluran Bantuan<br>• Upload foto bukti penyerahan ke penerima<br>• Desain Landing Page Publik (`welcome.blade.php`)<br>• Dashboard Ringkasan Admin (Rekapitulasi data & statistik) | `feat/penyaluran-faizal` |
 
 ---
 
 ## 📂 Bagian File, Langkah Kerja & Ruang Kreasi Per Anggota
 
-### 1. Afif Nur Rahman — Modul Donasi Pakaian
-*Alur: Donatur mengisi form pengajuan pakaian $\rightarrow$ dapat kode tracking $\rightarrow$ pantau status.*
+### 1. Afif Nur Rahman — Modul Donasi Pakaian & Hak Akses (RBAC)
+*Alur: Autentikasi & Otorisasi role (Admin vs Donatur) + Donatur mengisi form pengajuan donasi pakaian $\rightarrow$ dapat kode tracking $\rightarrow$ pantau status.*
 
 * **File Milik Afif (Bebas diotak-atik):**
+  - `app/Http/Middleware/IsAdmin.php` (Proteksi hak akses admin)
+  - `database/seeders/UserSeeder.php` (Akun awal admin & donatur)
   - `database/migrations/xxxx_create_donations_table.php`
   - `app/Models/Donation.php`
   - `app/Http/Controllers/DonationController.php`
   - Folder `resources/views/donations/` (`index.blade.php`, `create.blade.php`, `show.blade.php`, `edit.blade.php`)
 
 * **Langkah-Langkah Kerja Utama:**
-  1. Setup awal proyek Laravel + Breeze Blade (lihat panduan inisiasi di bawah).
-  2. Tambahkan kolom `'role'` bertipe enum `['admin', 'donatur']` di migrasi tabel `users`.
-  3. Buat migration tabel `donations` dan jalankan `php artisan migrate`.
-  4. Buat controller dengan resource method: `php artisan make:controller DonationController --resource`.
-  5. Buat fitur `create` & `store` untuk menampung input donatur (nama, jenis pakaian, jumlah, kondisi, upload gambar).
-  6. Buat fitur `show` untuk halaman tracking detail status pakaian berdasarkan kode tracking.
-  7. Buat method update status donasi yang nantinya bisa diakses oleh admin (`menunggu` $\rightarrow$ `diterima` $\rightarrow$ `disalurkan`).
+  1. Setup awal proyek Laravel + Breeze Blade & migrasi tabel `users` dengan kolom `'role'`.
+  2. Buat middleware `IsAdmin`:
+     ```bash
+     php artisan make:middleware IsAdmin
+     ```
+     Cek `$request->user()->role === 'admin'`. Daftarkan alias `'admin'` di `bootstrap/app.php`.
+  3. Buat `UserSeeder` berisi akun default Admin dan Donatur, lalu panggil di `DatabaseSeeder.php`.
+  4. Buat migration tabel `donations` dan jalankan `php artisan migrate`.
+  5. Buat controller: `php artisan make:controller DonationController --resource`.
+  6. Buat fitur `create` & `store` untuk menampung input donatur (nama, jenis pakaian, jumlah, kondisi, upload gambar).
+  7. Buat fitur `show` untuk halaman tracking detail status pakaian berdasarkan kode tracking.
+  8. Buat method update status donasi yang nantinya hanya bisa diakses oleh admin (`menunggu` $\rightarrow$ `diterima` $\rightarrow$ `disalurkan`).
 
 * **Ide Kreasi Bebas yang Boleh Ditambahkan Afif:**
   - Tambahkan generate kode resi otomatis (misal: `DON-202610-001`).
-  - Tambahkan tombol cetak label donasi / tanda terima dalam bentuk PDF/Print view untuk ditempel di kardus pakaian.
-  - Tambahkan preview gambar secara real-time sebelum tombol submit donasi diklik (pakai JavaScript sederhana).
-
+  - Tambahkan tombol cetak label donasi / tanda terima (PDF/Print view) untuk ditempel di kardus paket pakaian.
+  - Tambahkan preview gambar secara real-time sebelum submit donasi (menggunakan JavaScript sederhana).
 ---
 
 ### 2. Nurul Maftuhah — Modul Titik Posko (*Drop-Off Points*)
@@ -95,34 +102,31 @@ Agar setiap anggota bisa bebas mendesain UI, menambah logika, dan mengeksplorasi
 
 ---
 
-### 3. Muhammad Faizal Khabibi — Modul Penyaluran, RBAC & Landing Page
-*Alur: Admin mendokumentasikan baju yang sudah diserahkan ke penerima + mengatur hak akses admin vs donatur + mempercantik halaman depan web.*
+### 3. Muhammad Faizal Khabibi — Modul Penyaluran, Dashboard & Landing Page
+*Alur: Dokumentasi pakaian yang diserahkan ke panti asuhan/bencana + perancangan Landing Page publik dan Dashboard ringkasan admin.*
 
 * **File Milik Faizal (Bebas diotak-atik):**
-  - `app/Http/Middleware/IsAdmin.php`
-  - `database/seeders/UserSeeder.php`
   - `database/migrations/xxxx_create_distributions_table.php`
   - `app/Models/Distribution.php`
   - `app/Http/Controllers/DistributionController.php`
   - Folder `resources/views/distributions/` (`index.blade.php`, `create.blade.php`, `edit.blade.php`, `gallery.blade.php`)
   - `resources/views/welcome.blade.php` (Landing Page depan website)
+  - `resources/views/dashboard.blade.php` (Dashboard ringkasan statistik admin)
 
 * **Langkah-Langkah Kerja Utama:**
-  1. Buat middleware `IsAdmin`:
+  1. Buat model, migration, dan controller penyaluran:
      ```bash
-     php artisan make:middleware IsAdmin
+     php artisan make:model Distribution -mcr
      ```
-     Cek apakah `$request->user()->role === 'admin'`, jika bukan lempar `abort(403)`. Daftarkan di `bootstrap/app.php`.
-  2. Buat `UserSeeder` berisi 1 akun default Admin dan 1 akun Donatur dummy untuk mempermudah testing tim.
-  3. Buat model, migration, dan controller penyaluran: `php artisan make:model Distribution -mcr`.
-  4. Buat form CRUD pencatatan penyaluran bantuan pakaian ke panti/korban bencana lengkap dengan upload foto serah terima.
-  5. Rancang `resources/views/welcome.blade.php` sebagai landing page utama yang memuat statistik ringkas, ajakan mendonasikan baju, dan tautan menuju posko.
+  2. Isi kolom migration `distributions` (nama penerima bantuan, tanggal serah terima, total potong baju, foto dokumentasi, keterangan).
+  3. Buat form CRUD pencatatan penyaluran bantuan pakaian ke panti/korban bencana lengkap dengan upload foto serah terima.
+  4. Rancang `resources/views/welcome.blade.php` sebagai landing page utama publik yang memuat ajakan mendonasikan pakaian dan galeri foto transparansi penyaluran.
+  5. Rancang halaman Dashboard Admin yang memuat kartu ringkasan statistik (contoh: total donasi masuk, total baju tersalurkan, total posko aktif).
 
 * **Ide Kreasi Bebas yang Boleh Ditambahkan Faizal:**
   - Tambahkan galeri foto penyaluran interaktif (modal pop-up foto dokumentasi penyaluran pakaian).
-  - Tampilkan kartu ringkasan total pakaian terkumpul dan total pakaian tersalurkan di landing page (menggunakan query `Donation::sum('quantity')` dan `Distribution::sum('items_distributed')`).
-  - Tambahkan badge status pengguna di navbar (menampilkan label `[Admin]` atau `[Donatur]`).
-
+  - Tampilkan kartu ringkasan total pakaian terkumpul dan total pakaian tersalurkan di landing page (menggunakan query agregat `Donation::sum('quantity')` dan `Distribution::sum('items_count')`).
+  - Desain tampilan visual Dashboard Admin dengan kartu-kartu metrik yang modern.
 ---
 
 ## 🤝 Aturan Mengedit Zona Bersama (Agar Tidak Terjadi Konflik Kode)
@@ -485,8 +489,8 @@ php artisan migrate
 Saat ujian praktikum, asisten praktikum menguji pemahaman masing-masing anggota:
 
 * **Afif Nur Rahman**:
-  - Mampu menjelaskan alur pengajuan donasi pakaian, validasi tipe file gambar pada `DonationController`, dan pembuatan kode tracking otomatis.
+  - Mampu menjelaskan alur pengajuan donasi pakaian, validasi tipe file upload gambar pada `DonationController`, serta cara kerja otorisasi **Role-Based Access Control (RBAC)** melalui middleware `IsAdmin` dan pemisahan hak akses admin vs donatur.
 * **Nurul Maftuhah**:
   - Mampu menjelaskan fungsi CRUD lokasi posko, validasi form input alamat/PIC, serta bagaimana data posko ditampilkan ke publik/donatur.
 * **Muhammad Faizal Khabibi**:
-  - Mampu menjelaskan bagaimana middleware `IsAdmin` bekerja memfilter pengguna yang tidak berhak, pembuatan seeder user, serta bagaimana data penyaluran ditampilkan di landing page.
+  - Mampu menjelaskan fungsi CRUD laporan penyaluran bantuan pakaian ke masyarakat, perancangan Landing Page publik, serta perhitungan ringkasan data statistik pada Dashboard Admin.
