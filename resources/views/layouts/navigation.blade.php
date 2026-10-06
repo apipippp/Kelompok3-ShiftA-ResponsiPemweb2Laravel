@@ -15,6 +15,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <!-- Menu Donasi Pakaian (Afif) -->
+                    <x-nav-link :href="route('donations.index')" :active="request()->routeIs('donations.*')">
+                        {{ Auth::user()->role === 'admin' ? __('Kelola Donasi') : __('Donasi Saya') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +74,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('donations.index')" :active="request()->routeIs('donations.*')">
+                {{ Auth::user()->role === 'admin' ? __('Kelola Donasi') : __('Donasi Saya') }}
             </x-responsive-nav-link>
         </div>
 
