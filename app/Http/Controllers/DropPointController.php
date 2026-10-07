@@ -79,11 +79,35 @@ class DropPointController extends Controller
             ->with('success', 'Posko berhasil diperbarui');
     }
 
-    public function publicIndex()
+    public function publicIndex(Request $request)
     {
-        $dropPoints = DropPoint::latest()->get();
+        $query = DropPoint::latest();
 
-        return view('drop_points.public', compact('dropPoints'));
+        // Pencarian berdasarkan nama posko, alamat, atau kota
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('address', 'like', "%{$search}%")
+                ->orWhere('city', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter berdasarkan kota
+        if ($request->filled('city')) {
+            $query->where('city', $request->city);
+        }
+
+        $dropPoints = $query->get();
+
+        // Mengambil daftar kota yang tersedia
+        $cities = DropPoint::select('city')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
+        return view('drop_points.public', compact('dropPoints', 'cities'));
     }
 
     public function destroy(DropPoint $dropPoint)
