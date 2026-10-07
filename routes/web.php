@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DropPointController;
 use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Distribution;
@@ -13,6 +14,8 @@ Route::get('/', function () {
 Route::get('/laporan', [DistributionController::class, 'publicIndex'])
     ->name('laporan.public');
 
+Route::get('/posko', [DropPointController::class, 'publicIndex'])
+    ->name('posko.public');
 
 Route::get('/dashboard', function () {
 
@@ -52,10 +55,10 @@ Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-
         Route::resource('distributions', DistributionController::class)
             ->except(['show']);
 
+        Route::resource('drop-points', DropPointController::class);
     });
 
 Route::middleware('auth')->group(function () {

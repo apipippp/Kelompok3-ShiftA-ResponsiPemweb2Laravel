@@ -12,7 +12,7 @@
 <div class="max-w-4xl mx-auto bg-white p-6 shadow rounded">
 
 
-<form action="{{ route('drop_points.update',$dropPoint->id) }}"
+<form action="{{ route('admin.drop-points.update', $dropPoint->id) }}"
 method="POST"
 enctype="multipart/form-data">
 

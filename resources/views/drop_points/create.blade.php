@@ -14,7 +14,7 @@
 <div class="bg-white p-6 shadow rounded">
 
 
-<form action="{{ route('drop_points.store') }}"
+<form action="{{ route('admin.drop-points.store') }}"
       method="POST"
       enctype="multipart/form-data">
 

@@ -14,12 +14,10 @@ class DropPointController extends Controller
         return view('drop_points.index', compact('dropPoints'));
     }
 
-
     public function create()
     {
         return view('drop_points.create');
     }
-
 
     public function store(Request $request)
     {
@@ -34,33 +32,27 @@ class DropPointController extends Controller
             'maps_url' => 'nullable',
         ]);
 
-
         if ($request->hasFile('photo')) {
             $validated['photo'] = $request->file('photo')
                 ->store('drop_points', 'public');
         }
 
-
         DropPoint::create($validated);
 
-
         return redirect()
-            ->route('drop_points.index')
+            ->route('admin.drop-points.index')
             ->with('success', 'Posko berhasil ditambahkan');
     }
-
 
     public function show(DropPoint $dropPoint)
     {
         return view('drop_points.show', compact('dropPoint'));
     }
 
-
     public function edit(DropPoint $dropPoint)
     {
         return view('drop_points.edit', compact('dropPoint'));
     }
-
 
     public function update(Request $request, DropPoint $dropPoint)
     {
@@ -75,28 +67,31 @@ class DropPointController extends Controller
             'maps_url' => 'nullable',
         ]);
 
-
         if ($request->hasFile('photo')) {
             $validated['photo'] = $request->file('photo')
                 ->store('drop_points', 'public');
         }
 
-
         $dropPoint->update($validated);
 
-
         return redirect()
-            ->route('drop_points.index')
+            ->route('admin.drop-points.index')
             ->with('success', 'Posko berhasil diperbarui');
     }
 
+    public function publicIndex()
+    {
+        $dropPoints = DropPoint::latest()->get();
+
+        return view('drop_points.public', compact('dropPoints'));
+    }
 
     public function destroy(DropPoint $dropPoint)
     {
         $dropPoint->delete();
 
         return redirect()
-            ->route('drop_points.index')
+            ->route('admin.drop-points.index')
             ->with('success', 'Posko berhasil dihapus');
     }
 }
