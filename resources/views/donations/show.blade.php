@@ -55,7 +55,71 @@
                 </div>
             @endif
 
-            <!-- Banner Dibatalkan jika status dibatalkan -->
+            <!-- Panel Tindakan Cepat Admin (RBAC Verification) -->
+            @if ($user->role === 'admin')
+                <div class="bg-white rounded-3xl p-6 border-2 border-dark-green shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 pb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="p-1.5 rounded-lg bg-dark-green text-white text-base">🛡️</span>
+                            <div>
+                                <h3 class="font-bold text-dark-green text-base">Panel Verifikasi Status Donasi (Admin)</h3>
+                                <p class="text-xs text-gray-500">Klik salah satu tombol tindakan di bawah untuk memperbarui status perjalanan pakaian:</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold px-3 py-1 rounded-full border {{ $donation->status_badge_class }}">
+                            Status Saat Ini: {{ $donation->status_label }}
+                        </span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- 1. Tombol Verifikasi / Setujui -->
+                        <form action="{{ route('admin.donations.status', $donation) }}" method="POST" class="inline" onsubmit="return confirm('Setujui dan verifikasi donasi pakaian ini?')">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="diverifikasi">
+                            <button type="submit"
+                                    class="px-4 py-2.5 rounded-xl font-bold text-xs transition shadow-2xs flex items-center space-x-1.5 {{ $donation->status === 'diverifikasi' ? 'bg-dark-green text-white ring-2 ring-sage' : 'bg-sage/20 text-dark-green hover:bg-dark-green hover:text-white' }}">
+                                <span>✓ 1. Setujui & Verifikasi</span>
+                            </button>
+                        </form>
+
+                        <!-- 2. Tombol Diterima di Posko -->
+                        <form action="{{ route('admin.donations.status', $donation) }}" method="POST" class="inline" onsubmit="return confirm('Konfirmasi bahwa paket pakaian telah sampai di posko?')">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="diterima">
+                            <button type="submit"
+                                    class="px-4 py-2.5 rounded-xl font-bold text-xs transition shadow-2xs flex items-center space-x-1.5 {{ $donation->status === 'diterima' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white' }}">
+                                <span>📦 2. Konfirmasi Diterima di Posko</span>
+                            </button>
+                        </form>
+
+                        <!-- 3. Tombol Telah Disalurkan -->
+                        <form action="{{ route('admin.donations.status', $donation) }}" method="POST" class="inline" onsubmit="return confirm('Konfirmasi bahwa pakaian telah selesai disalurkan ke penerima?')">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="disalurkan">
+                            <button type="submit"
+                                    class="px-4 py-2.5 rounded-xl font-bold text-xs transition shadow-2xs flex items-center space-x-1.5 {{ $donation->status === 'disalurkan' ? 'bg-emerald-600 text-white ring-2 ring-emerald-300' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white' }}">
+                                <span>🎉 3. Konfirmasi Telah Disalurkan</span>
+                            </button>
+                        </form>
+
+                        <!-- 4. Tombol Tolak / Batalkan -->
+                        @if ($donation->status !== 'dibatalkan')
+                            <form action="{{ route('admin.donations.status', $donation) }}" method="POST" class="inline ms-auto" onsubmit="return confirm('Batalkan pengajuan donasi pakaian ini?')">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="dibatalkan">
+                                <button type="submit"
+                                        class="px-4 py-2.5 rounded-xl font-bold text-xs bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white transition shadow-2xs flex items-center space-x-1.5">
+                                    <span>✕ Batalkan Donasi</span>
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            @endif
             @if ($donation->status === 'dibatalkan')
                 <div class="p-4 rounded-2xl bg-rose-100 border border-rose-300 text-rose-800 text-sm flex items-center space-x-3">
                     <span class="text-2xl">🚫</span>
