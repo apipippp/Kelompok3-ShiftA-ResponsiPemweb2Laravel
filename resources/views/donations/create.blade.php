@@ -212,49 +212,72 @@
                             </div>
                         </div>
 
-                        <!-- Upload Foto Modern -->
+                        <!-- Upload Foto Modern (Unified Card) -->
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-1">
                                 Foto Pakaian (Opsional)
                             </label>
-                            <p class="text-[11px] text-gray-500 mb-3">Membantu petugas memverifikasi kategori pakaian. Format: JPG, PNG, WEBP (Maksimal 2 MB).</p>
+                            <p class="text-[11px] text-gray-500 mb-3">Membantu petugas memverifikasi kelayakan pakaian. Format: JPG, PNG, WEBP (Maksimal 2 MB).</p>
 
-                            <div class="flex flex-col sm:flex-row items-center gap-4">
-                                <!-- Area Dropzone -->
-                                <div class="flex-1 w-full space-y-2">
-                                    <label for="photo" class="block w-full border-2 border-dashed border-sage/50 hover:border-dark-green bg-cream/20 hover:bg-cream/40 rounded-2xl p-5 text-center cursor-pointer transition flex flex-col items-center justify-center">
-                                        <span class="text-2xl mb-1">📷</span>
-                                        <span class="text-xs font-bold text-dark-green">Pilih atau Seret Foto Pakaian</span>
-                                        <span class="text-[10px] text-gray-400 mt-0.5" id="file-chosen-text">Klik untuk telusuri berkas dari perangkat</span>
-                                        <input type="file"
-                                               id="photo"
-                                               name="photo"
-                                               accept="image/*"
-                                               class="hidden"
-                                               onchange="handlePreviewPhoto(this)">
-                                    </label>
-                                    <button type="button"
-                                            id="btn-cancel-file"
-                                            onclick="cancelPreviewPhoto()"
-                                            class="hidden text-xs font-semibold text-rose-600 hover:text-rose-800 transition items-center space-x-1 py-1">
-                                        <span>✕ Batal / Hapus Foto Ini</span>
-                                    </button>
+                            <!-- Hidden File Input -->
+                            <input type="file"
+                                   id="photo"
+                                   name="photo"
+                                   accept="image/*"
+                                   class="hidden"
+                                   onchange="handlePreviewPhoto(this)">
+
+                            <!-- Status 1: Dropzone Saat Belum Ada Foto -->
+                            <div id="dropzone-empty"
+                                 onclick="document.getElementById('photo').click()"
+                                 class="border-2 border-dashed border-sage/50 hover:border-dark-green bg-cream/20 hover:bg-cream/40 rounded-2xl p-6 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-2 group">
+                                <div class="w-12 h-12 rounded-2xl bg-sage/20 text-dark-green flex items-center justify-center text-2xl group-hover:scale-105 transition">
+                                    📷
+                                </div>
+                                <div>
+                                    <span class="text-xs sm:text-sm font-bold text-dark-green block">Klik atau Seret Foto Pakaian ke Sini</span>
+                                    <span class="text-[11px] text-gray-400 mt-0.5 block">Format: JPG, PNG, WEBP (Maks. 2 MB)</span>
+                                </div>
+                                <span class="inline-flex items-center px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 text-xs font-semibold text-gray-700 shadow-2xs group-hover:border-sage">
+                                    Pilih dari Perangkat
+                                </span>
+                            </div>
+
+                            <!-- Status 2: Kartu Preview Saat Foto Sudah Dipilih -->
+                            <div id="preview-card" class="hidden bg-cream/30 border border-sage/40 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4 transition">
+                                <!-- Thumbnail Foto Utuh -->
+                                <div class="w-full sm:w-36 h-36 rounded-xl overflow-hidden bg-white border border-sage/30 flex-shrink-0 flex items-center justify-center shadow-2xs p-1">
+                                    <img id="preview-image" src="" alt="Preview Foto" class="w-full h-full object-contain">
                                 </div>
 
-                                <!-- Kotak Preview -->
-                                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden bg-gray-50 flex-shrink-0 relative group" id="preview-container">
-                                    <img id="preview-image" src="" alt="Preview" class="w-full h-full object-cover hidden">
-                                    <span id="preview-placeholder" class="text-[11px] text-center text-gray-400 px-2 leading-tight">
-                                        Preview foto
-                                    </span>
-                                    <button type="button"
-                                            id="btn-remove-photo"
-                                            onclick="cancelPreviewPhoto()"
-                                            class="hidden absolute top-1.5 right-1.5 w-6 h-6 bg-rose-600 hover:bg-rose-700 text-white rounded-full flex items-center justify-center text-xs font-black shadow-md transition"
-                                            title="Batalkan foto yang dipilih">
-                                        ✕
-                                    </button>
+                                <!-- Info File & Aksi -->
+                                <div class="flex-1 w-full space-y-2 text-center sm:text-left">
+                                    <div class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">
+                                        <span>✓</span>
+                                        <span>Foto Berhasil Dipilih</span>
+                                    </div>
+                                    <h5 id="preview-filename" class="text-sm font-bold text-gray-900 break-all">
+                                        nama_file.png
+                                    </h5>
+                                    <p id="preview-filesize" class="text-xs text-gray-500 font-mono">
+                                        0 KB
+                                    </p>
+
+                                    <!-- Tombol Aksi Bersih -->
+                                    <div class="pt-1 flex items-center justify-center sm:justify-start gap-2.5">
+                                        <button type="button"
+                                                onclick="document.getElementById('photo').click()"
+                                                class="px-3.5 py-1.5 rounded-xl bg-white border border-gray-300 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition shadow-2xs">
+                                            🔄 Ganti Foto
+                                        </button>
+                                        <button type="button"
+                                                onclick="cancelPreviewPhoto()"
+                                                class="px-3.5 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-xs font-bold text-rose-700 hover:bg-rose-100 transition shadow-2xs">
+                                            🗑️ Hapus Foto
+                                        </button>
+                                    </div>
                                 </div>
+                            </div>
                         </div>
 
                         <!-- Catatan Tambahan -->
@@ -295,27 +318,22 @@
     <!-- Script Live Preview & Filename update -->
     <script>
         function handlePreviewPhoto(input) {
+            const dropzoneEmpty = document.getElementById('dropzone-empty');
+            const previewCard = document.getElementById('preview-card');
             const previewImage = document.getElementById('preview-image');
-            const previewPlaceholder = document.getElementById('preview-placeholder');
-            const fileChosenText = document.getElementById('file-chosen-text');
-            const btnRemovePhoto = document.getElementById('btn-remove-photo');
-            const btnCancelFile = document.getElementById('btn-cancel-file');
+            const previewFilename = document.getElementById('preview-filename');
+            const previewFilesize = document.getElementById('preview-filesize');
 
             if (input.files && input.files[0]) {
                 const file = input.files[0];
-                fileChosenText.textContent = file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
-                fileChosenText.classList.add('text-dark-green', 'font-bold');
+                previewFilename.textContent = file.name;
+                previewFilesize.textContent = Math.round(file.size / 1024) + ' KB';
 
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImage.src = e.target.result;
-                    previewImage.classList.remove('hidden');
-                    previewPlaceholder.classList.add('hidden');
-                    if (btnRemovePhoto) btnRemovePhoto.classList.remove('hidden');
-                    if (btnCancelFile) {
-                        btnCancelFile.classList.remove('hidden');
-                        btnCancelFile.classList.add('inline-flex');
-                    }
+                    dropzoneEmpty.classList.add('hidden');
+                    previewCard.classList.remove('hidden');
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -325,29 +343,14 @@
 
         function cancelPreviewPhoto() {
             const input = document.getElementById('photo');
+            const dropzoneEmpty = document.getElementById('dropzone-empty');
+            const previewCard = document.getElementById('preview-card');
             const previewImage = document.getElementById('preview-image');
-            const previewPlaceholder = document.getElementById('preview-placeholder');
-            const fileChosenText = document.getElementById('file-chosen-text');
-            const btnRemovePhoto = document.getElementById('btn-remove-photo');
-            const btnCancelFile = document.getElementById('btn-cancel-file');
 
             if (input) input.value = '';
-            if (fileChosenText) {
-                fileChosenText.textContent = 'Klik untuk telusuri berkas dari perangkat';
-                fileChosenText.classList.remove('text-dark-green', 'font-bold');
-            }
-            if (previewImage) {
-                previewImage.src = '';
-                previewImage.classList.add('hidden');
-            }
-            if (previewPlaceholder) {
-                previewPlaceholder.classList.remove('hidden');
-            }
-            if (btnRemovePhoto) btnRemovePhoto.classList.add('hidden');
-            if (btnCancelFile) {
-                btnCancelFile.classList.add('hidden');
-                btnCancelFile.classList.remove('inline-flex');
-            }
+            if (previewImage) previewImage.src = '';
+            if (previewCard) previewCard.classList.add('hidden');
+            if (dropzoneEmpty) dropzoneEmpty.classList.remove('hidden');
         }
     </script>
 </x-app-layout>
