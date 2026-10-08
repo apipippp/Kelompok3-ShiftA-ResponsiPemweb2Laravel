@@ -78,83 +78,63 @@
                 </a>
             </div>
 
-            <!-- Quick Actions untuk Seluruh Modul Tim -->
-            <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <!-- Quick Actions: 3 Menu Utama Selaras dengan Navbar -->
+            <div class="mt-8 grid gap-6 md:grid-cols-3">
 
-                <!-- Modul 1: Afif (Donasi) -->
+                <!-- 1. Kelola Donasi (Afif) -->
                 <div class="rounded-2xl bg-white p-6 shadow flex flex-col justify-between border-t-4 border-dark-green">
                     <div>
-                        <span class="text-xs font-bold text-dark-green uppercase tracking-wider">Modul Afif</span>
+                        <span class="text-xs font-bold text-dark-green uppercase tracking-wider">Modul Donasi</span>
                         <h3 class="text-xl font-bold text-dark-green mt-1">
                             Kelola Donasi
                         </h3>
                         <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-                            Verifikasi pengajuan pakaian dari donatur, ubah status, dan cetak label resi.
+                            Verifikasi pengajuan pakaian dari donatur, ubah status tiket, dan cetak label resi paket.
                         </p>
                     </div>
                     <a
                         href="{{ route('donations.index') }}"
-                        class="mt-5 block text-center rounded-xl bg-dark-green px-5 py-2.5 text-sm font-semibold text-white hover:bg-sage transition"
+                        class="mt-6 block text-center rounded-xl bg-dark-green px-5 py-3 text-sm font-semibold text-white hover:bg-sage transition shadow-sm"
                     >
-                        Kelola Donasi Pakaian
+                        Buka Kelola Donasi →
                     </a>
                 </div>
 
-                <!-- Modul 2: Nurul (Posko) -->
+                <!-- 2. Kelola Posko (Nurul) -->
                 <div class="rounded-2xl bg-white p-6 shadow flex flex-col justify-between border-t-4 border-sage">
                     <div>
-                        <span class="text-xs font-bold text-sage uppercase tracking-wider">Modul Nurul</span>
+                        <span class="text-xs font-bold text-sage uppercase tracking-wider">Modul Posko</span>
                         <h3 class="text-xl font-bold text-dark-green mt-1">
                             Kelola Posko
                         </h3>
                         <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-                            Tambah, edit, dan hapus titik posko pengumpulan pakaian drop-off.
+                            Tambah, edit, dan hapus titik posko pengumpulan pakaian drop-off di berbagai kota.
                         </p>
                     </div>
                     <a
                         href="{{ route('admin.drop-points.index') }}"
-                        class="mt-5 block text-center rounded-xl bg-dark-green px-5 py-2.5 text-sm font-semibold text-white hover:bg-sage transition"
+                        class="mt-6 block text-center rounded-xl bg-dark-green px-5 py-3 text-sm font-semibold text-white hover:bg-sage transition shadow-sm"
                     >
-                        Kelola Titik Posko
+                        Buka Kelola Posko →
                     </a>
                 </div>
 
-                <!-- Modul 3: Faizal (Penyaluran) -->
+                <!-- 3. Kelola Penyaluran (Faizal) -->
                 <div class="rounded-2xl bg-white p-6 shadow flex flex-col justify-between border-t-4 border-warm-brown">
                     <div>
-                        <span class="text-xs font-bold text-warm-brown uppercase tracking-wider">Modul Faizal</span>
+                        <span class="text-xs font-bold text-warm-brown uppercase tracking-wider">Modul Penyaluran</span>
                         <h3 class="text-xl font-bold text-dark-green mt-1">
                             Kelola Penyaluran
                         </h3>
                         <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-                            Catat penyerahan baju ke panti/korban dan unggah foto bukti dokumentasi.
+                            Catat penyerahan baju ke panti/korban bencana dan kelola bukti foto dokumentasi.
                         </p>
                     </div>
                     <a
                         href="{{ route('admin.distributions.index') }}"
-                        class="mt-5 block text-center rounded-xl bg-dark-green px-5 py-2.5 text-sm font-semibold text-white hover:bg-sage transition"
+                        class="mt-6 block text-center rounded-xl bg-dark-green px-5 py-3 text-sm font-semibold text-white hover:bg-sage transition shadow-sm"
                     >
-                        Kelola Data Penyaluran
-                    </a>
-                </div>
-
-                <!-- Pratinjau Publik (Buka di Tab Baru) -->
-                <div class="rounded-2xl bg-white p-6 shadow flex flex-col justify-between border-t-4 border-gray-400">
-                    <div>
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Pratinjau Publik</span>
-                        <h3 class="text-xl font-bold text-dark-green mt-1">
-                            Lihat Laporan Publik
-                        </h3>
-                        <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-                            Lihat galeri transparansi yang dapat diakses oleh masyarakat umum.
-                        </p>
-                    </div>
-                    <a
-                        href="{{ route('laporan.public') }}"
-                        target="_blank"
-                        class="mt-5 block text-center rounded-xl bg-warm-brown px-5 py-2.5 text-sm font-semibold text-white hover:bg-dark-green transition"
-                    >
-                        Buka Halaman Publik ↗
+                        Buka Kelola Penyaluran →
                     </a>
                 </div>
 
