@@ -14,74 +14,31 @@
 </head>
 
 <body class="bg-cream text-gray-800">
-    @if (Auth::check() && Auth::user()->role === 'admin')
-        <div class="bg-dark-green text-white px-6 py-2.5 text-xs flex justify-between items-center shadow-sm">
-            <span class="font-medium">
-                🛡️ Mode Pratinjau Publik (Login: <strong>{{ Auth::user()->name }}</strong>)
-            </span>
-            <a href="{{ route('dashboard') }}" class="font-bold bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition">
-                ← Kembali ke Dashboard Admin
-            </a>
-        </div>
-    @endif
-
-    {{-- Navbar --}}
-    <nav class="sticky top-0 z-50 border-b border-gray-100 bg-white/95 shadow-sm backdrop-blur">
-        <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-
-            <a
-                href="/"
-                class="text-2xl font-bold tracking-tight text-dark-green"
-            >
-                Lemari Peduli
-            </a>
-
-            <div class="flex items-center gap-3">
-
-                <a
-                    href="{{ route('donations.index') }}"
-                    class="hidden text-sm font-medium text-gray-600 transition hover:text-dark-green md:block"
-                >
-                    Donasi Saya
+    @auth
+        @include('layouts.navigation')
+    @else
+        {{-- Navbar Tamu / Belum Login --}}
+        <nav class="sticky top-0 z-50 border-b border-gray-100 bg-white/95 shadow-sm backdrop-blur">
+            <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+                <a href="/" class="flex items-center space-x-2.5">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-9 w-auto object-contain">
+                    <span class="text-2xl font-bold tracking-tight text-dark-green">Lemari Peduli</span>
                 </a>
 
-                <a
-                    href="/laporan"
-                    class="hidden text-sm font-medium text-gray-600 transition hover:text-dark-green md:block"
-                >
-                    Laporan Penyaluran
-                </a>
-
-                @auth
-
-                    <a
-                        href="{{ route('dashboard') }}"
-                        class="rounded-xl bg-dark-green px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
-                    >
-                        {{ Auth::user()->role === 'admin' ? 'Dashboard Admin' : 'Portal Donatur' }}
+                <div class="flex items-center gap-4">
+                    <a href="/laporan" class="text-sm font-semibold text-gray-700 hover:text-dark-green">
+                        Laporan Penyaluran
                     </a>
-                @else
-
-                    <a
-                        href="{{ route('login') }}"
-                        class="rounded-xl px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-gray-100"
-                    >
-                        Login
+                    <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-semibold text-dark-green hover:text-sage transition">
+                        Masuk
                     </a>
-
-                    <a
-                        href="{{ route('register') }}"
-                        class="rounded-xl bg-dark-green px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
-                    >
+                    <a href="{{ route('register') }}" class="rounded-xl bg-dark-green px-5 py-2.5 text-sm font-semibold text-white hover:bg-sage transition">
                         Daftar
                     </a>
-
-                @endauth
-
+                </div>
             </div>
-
-        </div>
-    </nav>
+        </nav>
+    @endauth
 
 
     {{-- Hero --}}
@@ -223,14 +180,12 @@
 
                     {{-- Tombol Cari --}}
                     <div class="flex items-end">
-
                         <button
                             type="submit"
-                            class="w-full rounded-xl bg-pink-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-pink-700 md:w-auto"
+                            class="w-full rounded-xl bg-dark-green px-6 py-3 text-sm font-semibold text-white transition hover:bg-sage md:w-auto shadow-sm"
                         >
                             Cari
                         </button>
-
                     </div>
 
 

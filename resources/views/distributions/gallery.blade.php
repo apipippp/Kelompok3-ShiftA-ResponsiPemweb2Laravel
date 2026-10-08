@@ -10,46 +10,34 @@
 </head>
 
 <body class="bg-cream text-gray-800">
-    @if (Auth::check() && Auth::user()->role === 'admin')
-        <div class="bg-dark-green text-white px-6 py-2.5 text-xs flex justify-between items-center shadow-sm">
-            <span class="font-medium">
-                🛡️ Mode Pratinjau Publik (Login: <strong>{{ Auth::user()->name }}</strong>)
-            </span>
-            <a href="{{ route('dashboard') }}" class="font-bold bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition">
-                ← Kembali ke Dashboard Admin
-            </a>
-        </div>
-    @endif
-
-    <nav class="border-b bg-white">
-        <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-            <a href="/" class="text-xl font-bold text-dark-green">
-                Lemari Peduli
-            </a>
-
-            <div class="flex items-center space-x-4">
-                <a
-                    href="/"
-                    class="text-sm font-medium text-gray-700 hover:text-dark-green"
-                >
-                    Beranda
+    @auth
+        @include('layouts.navigation')
+    @else
+        <!-- Navbar Publik untuk Pengunjung yang Belum Login -->
+        <nav class="border-b border-gray-100 bg-white/95 shadow-sm backdrop-blur sticky top-0 z-50">
+            <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+                <a href="/" class="flex items-center space-x-2.5">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-9 w-auto object-contain">
+                    <span class="text-xl font-bold text-dark-green">Lemari Peduli</span>
                 </a>
-                @auth
-                    <a
-                        href="{{ route('donations.index') }}"
-                        class="text-sm font-medium text-gray-700 hover:text-dark-green"
-                    >
-                        Donasi Saya
+
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-sm font-semibold text-gray-700 hover:text-dark-green">
+                        Beranda
                     </a>
-                    <a
-                        href="{{ route('dashboard') }}"
-                        class="text-sm font-bold text-dark-green hover:underline"
-                    >
-                        {{ Auth::user()->role === 'admin' ? 'Dashboard Admin →' : 'Portal Donatur →' }}
+                    <a href="/posko" class="text-sm font-semibold text-gray-700 hover:text-dark-green">
+                        Titik Posko
                     </a>
-                @endauth
+                    <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-semibold text-dark-green hover:text-sage transition">
+                        Masuk
+                    </a>
+                    <a href="{{ route('register') }}" class="rounded-xl bg-dark-green px-5 py-2.5 text-sm font-semibold text-white hover:bg-sage transition">
+                        Daftar
+                    </a>
+                </div>
             </div>
-    </nav>
+        </nav>
+    @endauth
 
     <main class="mx-auto max-w-7xl px-6 py-12">
 
