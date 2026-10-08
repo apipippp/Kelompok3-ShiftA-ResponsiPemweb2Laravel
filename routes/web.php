@@ -29,16 +29,37 @@ Route::get('/posko', [DropPointController::class, 'publicIndex'])->name('posko.p
 // 2. DASHBOARD (Admin & Ringkasan Metrik)
 // =========================================================================
 Route::get('/dashboard', function () {
-    $totalDistributions = Distribution::count();
-    $totalDistributedItems = Distribution::sum('items_count');
-    $totalDonations = Donation::sum('quantity');
-    $totalDropPoints = DropPoint::count();
+    $user = auth()->user();
+
+    if ($user->role === 'admin') {
+        $totalDistributions = Distribution::count();
+        $totalDistributedItems = Distribution::sum('items_count');
+        $totalDonations = Donation::sum('quantity');
+        $totalDropPoints = DropPoint::count();
+
+        return view('dashboard', compact(
+            'user',
+            'totalDistributions',
+            'totalDistributedItems',
+            'totalDonations',
+            'totalDropPoints'
+        ));
+    }
+
+    // Data Khusus Donatur
+    $myDonations = $user->donations()->latest()->take(5)->get();
+    $myTotalItems = $user->donations()->where('status', '!=', 'dibatalkan')->sum('quantity');
+    $myPending = $user->donations()->where('status', 'menunggu')->count();
+    $myVerified = $user->donations()->where('status', 'diverifikasi')->count();
+    $myDistributed = $user->donations()->where('status', 'disalurkan')->count();
 
     return view('dashboard', compact(
-        'totalDistributions',
-        'totalDistributedItems',
-        'totalDonations',
-        'totalDropPoints'
+        'user',
+        'myDonations',
+        'myTotalItems',
+        'myPending',
+        'myVerified',
+        'myDistributed'
     ));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
