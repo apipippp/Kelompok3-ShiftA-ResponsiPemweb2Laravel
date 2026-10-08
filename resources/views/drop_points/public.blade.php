@@ -14,6 +14,16 @@
 </head>
 
 <body class="bg-cream text-gray-800">
+    @auth
+        <div class="bg-dark-green text-white px-6 py-2.5 text-xs flex justify-between items-center shadow-sm">
+            <span class="font-medium">
+                👁️ Mode Pratinjau Publik (Login: <strong>{{ Auth::user()->name }}</strong>)
+            </span>
+            <a href="{{ route('dashboard') }}" class="font-bold bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition">
+                ← Kembali ke Dashboard
+            </a>
+        </div>
+    @endauth
 
     {{-- Navbar --}}
     <nav class="sticky top-0 z-50 border-b border-gray-100 bg-white/95 shadow-sm backdrop-blur">
