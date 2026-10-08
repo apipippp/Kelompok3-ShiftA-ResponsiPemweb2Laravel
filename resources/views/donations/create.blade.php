@@ -221,17 +221,25 @@
 
                             <div class="flex flex-col sm:flex-row items-center gap-4">
                                 <!-- Area Dropzone -->
-                                <label for="photo" class="flex-1 w-full border-2 border-dashed border-sage/50 hover:border-dark-green bg-cream/20 hover:bg-cream/40 rounded-2xl p-5 text-center cursor-pointer transition flex flex-col items-center justify-center">
-                                    <span class="text-2xl mb-1">📷</span>
-                                    <span class="text-xs font-bold text-dark-green">Pilih atau Seret Foto Pakaian</span>
-                                    <span class="text-[10px] text-gray-400 mt-0.5" id="file-chosen-text">Klik untuk telusuri berkas dari perangkat</span>
-                                    <input type="file"
-                                           id="photo"
-                                           name="photo"
-                                           accept="image/*"
-                                           class="hidden"
-                                           onchange="handlePreviewPhoto(this)">
-                                </label>
+                                <div class="flex-1 w-full space-y-2">
+                                    <label for="photo" class="block w-full border-2 border-dashed border-sage/50 hover:border-dark-green bg-cream/20 hover:bg-cream/40 rounded-2xl p-5 text-center cursor-pointer transition flex flex-col items-center justify-center">
+                                        <span class="text-2xl mb-1">📷</span>
+                                        <span class="text-xs font-bold text-dark-green">Pilih atau Seret Foto Pakaian</span>
+                                        <span class="text-[10px] text-gray-400 mt-0.5" id="file-chosen-text">Klik untuk telusuri berkas dari perangkat</span>
+                                        <input type="file"
+                                               id="photo"
+                                               name="photo"
+                                               accept="image/*"
+                                               class="hidden"
+                                               onchange="handlePreviewPhoto(this)">
+                                    </label>
+                                    <button type="button"
+                                            id="btn-cancel-file"
+                                            onclick="cancelPreviewPhoto()"
+                                            class="hidden text-xs font-semibold text-rose-600 hover:text-rose-800 transition items-center space-x-1 py-1">
+                                        <span>✕ Batal / Hapus Foto Ini</span>
+                                    </button>
+                                </div>
 
                                 <!-- Kotak Preview -->
                                 <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden bg-gray-50 flex-shrink-0 relative group" id="preview-container">
@@ -239,8 +247,14 @@
                                     <span id="preview-placeholder" class="text-[11px] text-center text-gray-400 px-2 leading-tight">
                                         Preview foto
                                     </span>
+                                    <button type="button"
+                                            id="btn-remove-photo"
+                                            onclick="cancelPreviewPhoto()"
+                                            class="hidden absolute top-1.5 right-1.5 w-6 h-6 bg-rose-600 hover:bg-rose-700 text-white rounded-full flex items-center justify-center text-xs font-black shadow-md transition"
+                                            title="Batalkan foto yang dipilih">
+                                        ✕
+                                    </button>
                                 </div>
-                            </div>
                         </div>
 
                         <!-- Catatan Tambahan -->
@@ -284,6 +298,8 @@
             const previewImage = document.getElementById('preview-image');
             const previewPlaceholder = document.getElementById('preview-placeholder');
             const fileChosenText = document.getElementById('file-chosen-text');
+            const btnRemovePhoto = document.getElementById('btn-remove-photo');
+            const btnCancelFile = document.getElementById('btn-cancel-file');
 
             if (input.files && input.files[0]) {
                 const file = input.files[0];
@@ -295,14 +311,42 @@
                     previewImage.src = e.target.result;
                     previewImage.classList.remove('hidden');
                     previewPlaceholder.classList.add('hidden');
+                    if (btnRemovePhoto) btnRemovePhoto.classList.remove('hidden');
+                    if (btnCancelFile) {
+                        btnCancelFile.classList.remove('hidden');
+                        btnCancelFile.classList.add('inline-flex');
+                    }
                 };
                 reader.readAsDataURL(file);
             } else {
+                cancelPreviewPhoto();
+            }
+        }
+
+        function cancelPreviewPhoto() {
+            const input = document.getElementById('photo');
+            const previewImage = document.getElementById('preview-image');
+            const previewPlaceholder = document.getElementById('preview-placeholder');
+            const fileChosenText = document.getElementById('file-chosen-text');
+            const btnRemovePhoto = document.getElementById('btn-remove-photo');
+            const btnCancelFile = document.getElementById('btn-cancel-file');
+
+            if (input) input.value = '';
+            if (fileChosenText) {
                 fileChosenText.textContent = 'Klik untuk telusuri berkas dari perangkat';
                 fileChosenText.classList.remove('text-dark-green', 'font-bold');
+            }
+            if (previewImage) {
                 previewImage.src = '';
                 previewImage.classList.add('hidden');
+            }
+            if (previewPlaceholder) {
                 previewPlaceholder.classList.remove('hidden');
+            }
+            if (btnRemovePhoto) btnRemovePhoto.classList.add('hidden');
+            if (btnCancelFile) {
+                btnCancelFile.classList.add('hidden');
+                btnCancelFile.classList.remove('inline-flex');
             }
         }
     </script>
