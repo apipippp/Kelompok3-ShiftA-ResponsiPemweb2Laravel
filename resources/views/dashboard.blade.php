@@ -162,37 +162,37 @@
             {{-- ======================================================== --}}
             @else
 
-                <!-- 1. Hero Card Sambutan Hangat Donatur -->
-                <div class="bg-gradient-to-br from-dark-green to-[#274426] rounded-3xl p-6 sm:p-10 text-white shadow-md relative overflow-hidden">
-                    <div class="relative z-10 max-w-2xl space-y-3">
-                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sage/30 text-cream text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+                <!-- 1. Hero Card Sambutan Hangat Donatur (High-Contrast & Clean) -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-sage/30 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="space-y-3 max-w-2xl">
+                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sage/20 text-dark-green text-xs font-bold uppercase tracking-wider">
                             <span>🌱</span>
-                            <span>Ruang Donasi Anda</span>
+                            <span>Ruang Kebaikan Donatur</span>
                         </div>
-                        <h1 class="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
+                        <h1 class="text-3xl sm:text-4xl font-black text-dark-green tracking-tight leading-tight">
                             Halo, {{ $user->name }}!
                         </h1>
-                        <p class="text-sm text-cream/90 leading-relaxed">
+                        <p class="text-sm text-gray-600 leading-relaxed">
                             Punya pakaian bersih di lemari yang sudah jarang dipakai? Jangan biarkan menumpuk. Jadikan pakaian tersebut berkah dan kehangatan baru bagi saudara kita.
                         </p>
-                        <div class="pt-3 flex flex-wrap items-center gap-3">
+                        <div class="pt-2 flex flex-wrap items-center gap-3">
                             <a href="{{ route('donations.create') }}"
-                               class="px-6 py-3.5 bg-sage text-dark-green font-black text-sm rounded-2xl hover:bg-cream transition shadow-md flex items-center space-x-2">
+                               class="px-6 py-3 bg-dark-green text-white font-bold text-xs rounded-xl hover:bg-sage transition shadow-sm flex items-center space-x-2">
                                 <span>👕 Donasikan Pakaian Sekarang</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                 </svg>
                             </a>
                             <a href="{{ route('donations.index') }}"
-                               class="px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-2xl transition border border-white/20">
+                               class="px-5 py-3 bg-cream border border-warm-brown/40 text-warm-brown font-bold text-xs rounded-xl hover:bg-warm-brown hover:text-white transition">
                                 Riwayat Donasi Saya
                             </a>
                         </div>
                     </div>
 
-                    <!-- Watermark Logo Accent -->
-                    <div class="absolute -right-6 -bottom-6 opacity-10 pointer-events-none hidden sm:block">
-                        <span class="text-[200px]">👕</span>
+                    <!-- Visual Accent Logo -->
+                    <div class="hidden sm:flex w-24 h-24 rounded-2xl bg-cream/60 border border-sage/30 items-center justify-center p-3 flex-shrink-0">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-full h-full object-contain">
                     </div>
                 </div>
 
@@ -214,17 +214,17 @@
 
                         <!-- Progress Mini Status -->
                         <div class="pt-3 border-t border-gray-100 grid grid-cols-3 gap-2 text-center">
-                            <div class="p-2 rounded-xl bg-amber-50 border border-amber-100">
-                                <span class="block text-lg font-black text-amber-600">{{ $myPending }}</span>
-                                <span class="text-[10px] text-amber-800 font-semibold">Menunggu</span>
+                            <div class="p-2 rounded-xl bg-amber-100/70 border border-amber-200">
+                                <span class="block text-xl font-black text-amber-800">{{ $myPending }}</span>
+                                <span class="text-[10px] text-amber-900 font-bold uppercase tracking-wider">Menunggu</span>
                             </div>
-                            <div class="p-2 rounded-xl bg-blue-50 border border-blue-100">
-                                <span class="block text-lg font-black text-blue-600">{{ $myVerified }}</span>
-                                <span class="text-[10px] text-blue-800 font-semibold">Di Posko</span>
+                            <div class="p-2 rounded-xl bg-blue-100/70 border border-blue-200">
+                                <span class="block text-xl font-black text-blue-800">{{ $myVerified }}</span>
+                                <span class="text-[10px] text-blue-900 font-bold uppercase tracking-wider">Di Posko</span>
                             </div>
-                            <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-100">
-                                <span class="block text-lg font-black text-emerald-600">{{ $myDistributed }}</span>
-                                <span class="text-[10px] text-emerald-800 font-semibold">Tersalurkan</span>
+                            <div class="p-2 rounded-xl bg-emerald-100/70 border border-emerald-200">
+                                <span class="block text-xl font-black text-emerald-800">{{ $myDistributed }}</span>
+                                <span class="text-[10px] text-emerald-900 font-bold uppercase tracking-wider">Tersalurkan</span>
                             </div>
                         </div>
                     </div>
