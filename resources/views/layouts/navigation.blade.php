@@ -7,7 +7,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center space-x-2.5 group">
                         <x-application-logo class="block h-10 w-auto object-contain group-hover:scale-105 transition" />
-                        <span class="font-extrabold text-lg text-dark-green tracking-tight hidden sm:inline-block">Lemari Peduli</span>
+                        <span class="font-bold text-lg text-dark-green tracking-tight hidden sm:inline-block">Lemari Peduli</span>
                     </a>
                 </div>
 
