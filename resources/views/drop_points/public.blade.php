@@ -14,16 +14,16 @@
 </head>
 
 <body class="bg-cream text-gray-800">
-    @auth
+    @if (Auth::check() && Auth::user()->role === 'admin')
         <div class="bg-dark-green text-white px-6 py-2.5 text-xs flex justify-between items-center shadow-sm">
             <span class="font-medium">
-                👁️ Mode Pratinjau Publik (Login: <strong>{{ Auth::user()->name }}</strong>)
+                🛡️ Mode Pratinjau Publik (Login: <strong>{{ Auth::user()->name }}</strong>)
             </span>
             <a href="{{ route('dashboard') }}" class="font-bold bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition">
-                ← Kembali ke Dashboard
+                ← Kembali ke Dashboard Admin
             </a>
         </div>
-    @endauth
+    @endif
 
     {{-- Navbar --}}
     <nav class="sticky top-0 z-50 border-b border-gray-100 bg-white/95 shadow-sm backdrop-blur">
@@ -39,6 +39,13 @@
             <div class="flex items-center gap-3">
 
                 <a
+                    href="{{ route('donations.index') }}"
+                    class="hidden text-sm font-medium text-gray-600 transition hover:text-dark-green md:block"
+                >
+                    Donasi Saya
+                </a>
+
+                <a
                     href="/laporan"
                     class="hidden text-sm font-medium text-gray-600 transition hover:text-dark-green md:block"
                 >
@@ -51,9 +58,8 @@
                         href="{{ route('dashboard') }}"
                         class="rounded-xl bg-dark-green px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
                     >
-                        Dashboard
+                        {{ Auth::user()->role === 'admin' ? 'Dashboard Admin' : 'Portal Donatur' }}
                     </a>
-
                 @else
 
                     <a
