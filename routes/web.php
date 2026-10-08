@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\DropPointController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Distribution;
+use App\Models\Donation;
+use App\Models\DropPoint;
 use Illuminate\Support\Facades\Route;
 
 // =========================================================================
@@ -11,15 +16,34 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Cek Resi / Tracking Donasi Publik
+// Cek Resi / Tracking Donasi Publik (Afif)
 Route::get('/tracking', [DonationController::class, 'track'])->name('donations.track');
 
+// Galeri Laporan Penyaluran Publik (Faizal)
+Route::get('/laporan', [DistributionController::class, 'publicIndex'])->name('laporan.public');
+
+// Daftar Titik Posko Publik (Nurul)
+Route::get('/posko', [DropPointController::class, 'publicIndex'])->name('posko.public');
+
+// =========================================================================
+// 2. DASHBOARD (Admin & Ringkasan Metrik)
+// =========================================================================
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $totalDistributions = Distribution::count();
+    $totalDistributedItems = Distribution::sum('items_count');
+    $totalDonations = Donation::sum('quantity');
+    $totalDropPoints = DropPoint::count();
+
+    return view('dashboard', compact(
+        'totalDistributions',
+        'totalDistributedItems',
+        'totalDonations',
+        'totalDropPoints'
+    ));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // =========================================================================
-// 2. RUTE USER LOGIN (Donatur & Admin)
+// 3. RUTE USER LOGIN (Donatur & Admin)
 // =========================================================================
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,10 +56,16 @@ Route::middleware('auth')->group(function () {
 });
 
 // =========================================================================
-// 3. RUTE KHUSUS ADMIN (Dilindungi Middleware IsAdmin)
+// 4. RUTE KHUSUS ADMIN (Dilindungi Middleware IsAdmin)
 // =========================================================================
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Update status verifikasi donasi pakaian
+    // Kelola Penyaluran Bantuan (Faizal)
+    Route::resource('distributions', DistributionController::class)->except(['show']);
+
+    // Kelola Titik Posko Drop-Off (Nurul)
+    Route::resource('drop-points', DropPointController::class);
+
+    // Update Status Verifikasi Donasi (Afif)
     Route::patch('/donations/{donation}/status', [DonationController::class, 'updateStatus'])->name('donations.status');
 });
 
