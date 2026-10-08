@@ -17,13 +17,22 @@
                 Lemari Peduli
             </a>
 
-            <a
-                href="/"
-                class="text-sm font-medium text-gray-700 hover:text-dark-green"
-            >
-                Beranda
-            </a>
-        </div>
+            <div class="flex items-center space-x-4">
+                <a
+                    href="/"
+                    class="text-sm font-medium text-gray-700 hover:text-dark-green"
+                >
+                    Beranda
+                </a>
+                @auth
+                    <a
+                        href="{{ route('dashboard') }}"
+                        class="text-sm font-bold text-dark-green hover:underline"
+                    >
+                        Dashboard →
+                    </a>
+                @endauth
+            </div>
     </nav>
 
     <main class="mx-auto max-w-7xl px-6 py-12">

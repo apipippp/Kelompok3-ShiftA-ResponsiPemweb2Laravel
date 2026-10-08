@@ -22,14 +22,26 @@
                     </x-nav-link>
 
                     <!-- Menu Titik Posko (Nurul) -->
-                    <x-nav-link :href="route('posko.public')" :active="request()->routeIs('posko.*')">
-                        {{ __('Titik Posko') }}
-                    </x-nav-link>
+                    @if (Auth::user()->role === 'admin')
+                        <x-nav-link :href="route('admin.drop-points.index')" :active="request()->routeIs('admin.drop-points.*')">
+                            {{ __('Kelola Posko') }}
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('posko.public')" :active="request()->routeIs('posko.*')">
+                            {{ __('Titik Posko') }}
+                        </x-nav-link>
+                    @endif
 
                     <!-- Menu Laporan Penyaluran (Faizal) -->
-                    <x-nav-link :href="route('laporan.public')" :active="request()->routeIs('laporan.*')">
-                        {{ __('Laporan Penyaluran') }}
-                    </x-nav-link>
+                    @if (Auth::user()->role === 'admin')
+                        <x-nav-link :href="route('admin.distributions.index')" :active="request()->routeIs('admin.distributions.*')">
+                            {{ __('Kelola Penyaluran') }}
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('laporan.public')" :active="request()->routeIs('laporan.*')">
+                            {{ __('Laporan Penyaluran') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -91,15 +103,26 @@
             </x-responsive-nav-link>
 
             <!-- Menu Titik Posko (Nurul) -->
-            <x-responsive-nav-link :href="route('posko.public')" :active="request()->routeIs('posko.*')">
-                {{ __('Titik Posko') }}
-            </x-responsive-nav-link>
+            @if (Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.drop-points.index')" :active="request()->routeIs('admin.drop-points.*')">
+                    {{ __('Kelola Posko') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('posko.public')" :active="request()->routeIs('posko.*')">
+                    {{ __('Titik Posko') }}
+                </x-responsive-nav-link>
+            @endif
 
             <!-- Menu Laporan Penyaluran (Faizal) -->
-            <x-responsive-nav-link :href="route('laporan.public')" :active="request()->routeIs('laporan.*')">
-                {{ __('Laporan Penyaluran') }}
-            </x-responsive-nav-link>
-        </div>
+            @if (Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.distributions.index')" :active="request()->routeIs('admin.distributions.*')">
+                    {{ __('Kelola Penyaluran') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('laporan.public')" :active="request()->routeIs('laporan.*')">
+                    {{ __('Laporan Penyaluran') }}
+                </x-responsive-nav-link>
+            @endif
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
