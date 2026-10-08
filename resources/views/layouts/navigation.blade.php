@@ -30,7 +30,6 @@
                     <x-nav-link :href="route('laporan.public')" :active="request()->routeIs('laporan.*')">
                         {{ __('Laporan Penyaluran') }}
                     </x-nav-link>
-                    </x-nav-link>
                 </div>
             </div>
 
@@ -99,7 +98,6 @@
             <!-- Menu Laporan Penyaluran (Faizal) -->
             <x-responsive-nav-link :href="route('laporan.public')" :active="request()->routeIs('laporan.*')">
                 {{ __('Laporan Penyaluran') }}
-            </x-responsive-nav-link>
             </x-responsive-nav-link>
         </div>
 
