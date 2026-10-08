@@ -13,7 +13,22 @@ use Illuminate\Support\Facades\Route;
 // 1. RUTE PUBLIK (Bebas diakses pengunjung / tanpa login)
 // =========================================================================
 Route::get('/', function () {
-    return view('welcome');
+    $totalClothing = \App\Models\Donation::where('status', '!=', 'dibatalkan')->sum('quantity');
+    $totalDonors = \App\Models\User::where('role', 'donatur')->count();
+    $totalDistributed = \App\Models\Distribution::sum('items_count');
+    $totalDropPoints = \App\Models\DropPoint::count();
+
+    $sampleDropPoints = \App\Models\DropPoint::latest()->take(3)->get();
+    $recentDistributions = \App\Models\Distribution::latest('distribution_date')->take(3)->get();
+
+    return view('welcome', compact(
+        'totalClothing',
+        'totalDonors',
+        'totalDistributed',
+        'totalDropPoints',
+        'sampleDropPoints',
+        'recentDistributions'
+    ));
 })->name('home');
 
 // Cek Resi / Tracking Donasi Publik (Afif)
