@@ -530,3 +530,13 @@ Saat ujian praktikum, asisten praktikum menguji pemahaman masing-masing anggota:
   - Mampu menjelaskan fungsi CRUD lokasi posko, validasi form input alamat/PIC, serta bagaimana data posko ditampilkan ke publik/donatur.
 * **Muhammad Faizal Khabibi**:
   - Mampu menjelaskan fungsi CRUD laporan penyaluran bantuan pakaian ke masyarakat, perancangan Landing Page publik, serta perhitungan ringkasan data statistik pada Dashboard Admin.
+
+---
+
+## 🌐 Link Deployment Live (Praktikum)
+
+Website telah berhasil di-deploy ke server aaPanel dan dapat diakses langsung oleh dosen/asisten praktikum secara online melalui internet:
+* **URL Utama**: [https://a3.athafa.cloud](https://a3.athafa.cloud) (atau [http://a3.athafa.cloud](http://a3.athafa.cloud))
+* **Kredensial Akun Uji Coba**:
+  - **Administrator**: `admin@lemaripeduli.com` | Password: `password`
+  - **Donatur**: `donatur@lemaripeduli.com` | Password: `password`
