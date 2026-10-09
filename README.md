@@ -110,6 +110,51 @@ Backend Lemari Peduli menyediakan RESTful API lengkap dengan validasi **Form Req
 | `PUT` | `/api/distributions/{id}` | Mengubah catatan penyaluran | Yes (Khusus Admin) |
 | `DELETE` | `/api/distributions/{id}` | Menghapus catatan penyaluran | Yes (Khusus Admin) |
 
+
+### 5. Panduan Pengujian API di Postman (Step-by-Step)
+Langkah pengujian endpoint RESTful API secara langsung menggunakan Postman / HTTP Client:
+1. **Uji Login untuk Mendapatkan Token Sanctum (POST):**
+   - **Method:** `POST`
+   - **URL:** `https://a3.athafa.cloud/api/login`
+   - **Headers:** `Accept: application/json`, `Content-Type: application/json`
+   - **Body (raw JSON):**
+     ```json
+     {
+         "email": "admin@lemaripeduli.com",
+         "password": "password"
+     }
+     ```
+   - **Respon:** `200 OK`, salin nilai `"access_token"` (contoh: `1|ujH6kNN7SfBv9y3...`).
+2. **Uji Endpoint Terproteksi Token (GET /api/donations):**
+   - **Method:** `GET`
+   - **URL:** `https://a3.athafa.cloud/api/donations`
+   - **Headers:** `Accept: application/json`
+   - **Authorization:** Type **Bearer Token** (tempelkan token dari langkah 1).
+   - **Respon:** `200 OK` (Format JSON Resource donasi lengkap dengan data paginasi).
+3. **Uji Buat Donasi via API (POST /api/donations):**
+   - **Method:** `POST`
+   - **URL:** `https://a3.athafa.cloud/api/donations`
+   - **Authorization:** Type **Bearer Token** (token yang sama).
+   - **Headers:** `Accept: application/json`, `Content-Type: application/json`
+   - **Body (raw JSON):**
+     ```json
+     {
+         "donor_name": "Budi Santoso",
+         "donor_phone": "081234567890",
+         "clothing_type": "Kaos & T-Shirt",
+         "quantity": 5,
+         "condition": "sangat_baik",
+         "delivery_method": "antar_posko",
+         "notes": "Pakaian anak usia 7 tahun"
+     }
+     ```
+   - **Respon:** `201 Created` (Server mengembalikan nomor resi baru `DON-20261009-XXXX`).
+4. **Uji Pelacakan Resi Publik (GET /api/tracking/{code} - Tanpa Token):**
+   - **Method:** `GET`
+   - **URL:** `https://a3.athafa.cloud/api/tracking/DON-20261009-OCWM`
+   - **Authorization:** `No Auth` (Bebas diakses publik).
+   - **Headers:** `Accept: application/json`
+   - **Respon:** `200 OK` (Mengembalikan data pelacakan paket pakaian).
 ---
 
 ## 🚀 Panduan Instalasi Lokal
