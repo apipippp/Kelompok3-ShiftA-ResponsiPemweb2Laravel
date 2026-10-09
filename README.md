@@ -15,7 +15,7 @@
 | No | Nama Lengkap | NIM | Shift Awal | Shift Akhir | Jobdesk / Kontribusi | Link Video Penjelasan |
 |:---:|:---|:---:|:---:|:---:|:---|:---:|
 | 1 | **Afif Nur Rahman** *(Lead)* | H1H024016 | Shift C | Shift A | Modul Donasi Pakaian, RESTful API Laravel, Autentikasi Laravel Sanctum, dan Otorisasi RBAC | [YouTube/Drive](https://...) |
-| 2 | **Nurul Maftuhah** | H1H024002 | Shift A | Shift A | Modul Titik Posko (*Drop-Off*), Katalog Posko Wilayah, dan Integrasi Peta Lokasi | [YouTube/Drive](https://...) |
+| 2 | **Nurul Maftuhah** | H1H024002 | Shift A | Shift A | Modul Titik Posko (*Drop-Off*), Katalog Posko Wilayah, dan Integrasi Peta Lokasi | (https://youtu.be/TFFeUvHpUVo) |
 | 3 | **Muhammad Faizal Khabibi** | H1H024003 | Shift A | Shift A | Modul Laporan Penyaluran Bantuan, Dashboard Metrik Statistik, dan Landing Page Beranda | [YouTube/Drive](https://...) |
 
 ---
