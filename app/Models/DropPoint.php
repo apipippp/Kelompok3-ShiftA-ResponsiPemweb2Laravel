@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class DropPoint extends Model
 {
     protected $fillable = [
@@ -16,4 +16,9 @@ class DropPoint extends Model
         'photo',
         'maps_url',
     ];
+
+    public function donations(): HasMany
+    {
+        return $this->hasMany(Donation::class);
+    }
 }

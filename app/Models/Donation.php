@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Donation extends Model
@@ -13,6 +14,7 @@ class Donation extends Model
 
     protected $fillable = [
         'user_id',
+        'drop_point_id',
         'tracking_code',
         'donor_name',
         'donor_phone',
@@ -28,6 +30,16 @@ class Donation extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function dropPoint(): BelongsTo
+    {
+        return $this->belongsTo(DropPoint::class);
+    }
+
+    public function distribution(): HasOne
+    {
+        return $this->hasOne(Distribution::class);
     }
 
     public static function generateTrackingCode(): string

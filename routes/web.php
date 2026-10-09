@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Route;
 // 1. RUTE PUBLIK (Bebas diakses pengunjung / tanpa login)
 // =========================================================================
 Route::get('/', function () {
-    $totalClothing = \App\Models\Donation::where('status', '!=', 'dibatalkan')->sum('quantity');
-    $totalDonors = \App\Models\User::where('role', 'donatur')->count();
-    $totalDistributed = \App\Models\Distribution::sum('items_count');
-    $totalDropPoints = \App\Models\DropPoint::count();
+    $totalClothing = Schema::hasTable('donations') ? \App\Models\Donation::where('status', '!=', 'dibatalkan')->sum('quantity') : 0;
+    $totalDonors = Schema::hasTable('users') ? \App\Models\User::where('role', 'donatur')->count() : 0;
+    $totalDistributed = Schema::hasTable('distributions') ? \App\Models\Distribution::sum('items_count') : 0;
+    $totalDropPoints = Schema::hasTable('drop_points') ? \App\Models\DropPoint::count() : 0;
 
-    $sampleDropPoints = \App\Models\DropPoint::latest()->take(3)->get();
-    $recentDistributions = \App\Models\Distribution::latest('distribution_date')->take(3)->get();
+    $sampleDropPoints = Schema::hasTable('drop_points') ? \App\Models\DropPoint::latest()->take(3)->get() : collect();
+    $recentDistributions = Schema::hasTable('distributions') ? \App\Models\Distribution::latest('distribution_date')->take(3)->get() : collect();
 
     return view('welcome', compact(
         'totalClothing',
