@@ -23,9 +23,8 @@
 
     <div class="py-8 bg-cream/30 min-h-[calc(100vh-140px)]">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="bg-white rounded-3xl shadow-sm border border-sage/30 overflow-hidden">
-
+            <div class="bezel-outer">
+                <div class="bezel-inner overflow-hidden bg-white">
                 <!-- Header Banner -->
                 <div class="bg-dark-green px-6 sm:px-8 py-6 text-white flex items-center justify-between">
                     <div class="space-y-1">
@@ -309,9 +308,8 @@
                     </div>
 
                 </form>
-
+                </div>
             </div>
-
         </div>
     </div>
 

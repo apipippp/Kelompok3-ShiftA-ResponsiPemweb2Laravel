@@ -1,241 +1,276 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h2 class="font-extrabold text-2xl text-dark-green leading-tight">
-                    {{ $user->role === 'admin' ? __('Panel Kendali Administrator') : __('Portal Donatur') }}
-                </h2>
-                <p class="text-xs text-gray-500 mt-0.5">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sage/20 text-forest text-[10px] font-extrabold uppercase tracking-[0.2em] mb-2 border border-sage/30">
+                    <span>{{ $user->role === 'admin' ? '🛡️ Administrator' : '🌱 Donatur Aktif' }}</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-forest tracking-tight leading-tight">
+                    {{ $user->role === 'admin' ? __('Panel Kendali Eksekutif') : __('Portal Kebaikan Donatur') }}
+                </h1>
+                <p class="text-xs text-gray-500 mt-1">
                     {{ $user->role === 'admin'
-                        ? 'Pusat kendali dan pengelolaan seluruh aktivitas sistem Lemari Peduli.'
-                        : 'Selamat datang di ruang kebaikan Anda bersama Lemari Peduli.' }}
+                        ? 'Pengawasan operasional donasi, verifikasi kurasi pakaian, posko, dan penyaluran.'
+                        : 'Kelola kontribusi sosial Anda dan pantau perjalanan pakaian secara real-time.' }}
                 </p>
             </div>
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider {{ $user->role === 'admin' ? 'bg-dark-green text-white shadow-sm' : 'bg-sage/20 text-dark-green border border-sage/40' }}">
-                {{ $user->role === 'admin' ? '🛡️ Administrator' : '🌱 Donatur Aktif' }}
-            </span>
+            <div class="flex items-center space-x-3">
+                @if ($user->role === 'admin')
+                    <a href="{{ route('donations.index') }}"
+                       class="btn-island bg-forest text-white hover:bg-dark-green shadow-ambient-sm group">
+                        <span>Verifikasi Donasi</span>
+                        <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                            ✓
+                        </span>
+                    </a>
+                @else
+                    <a href="{{ route('donations.create') }}"
+                       class="btn-island bg-forest text-white hover:bg-dark-green shadow-ambient-sm group">
+                        <span>Donasikan Pakaian</span>
+                        <span class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                            +
+                        </span>
+                    </a>
+                @endif
+            </div>
         </div>
     </x-slot>
 
-    <div class="bg-cream/40 min-h-[calc(100vh-140px)] py-8">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+    <div class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
 
-            {{-- ======================================================== --}}
-            {{-- 1. TAMPILAN KHUSUS ADMINISTRATOR (DATA & KELOLA SISTEM)  --}}
-            {{-- ======================================================== --}}
-            @if ($user->role === 'admin')
+        {{-- ======================================================== --}}
+        {{-- 1. DASHBOARD KHUSUS ADMINISTRATOR                        --}}
+        {{-- ======================================================== --}}
+        @if ($user->role === 'admin')
 
-                <!-- Banner Header Admin -->
-                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-sage/30 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-dark-green text-white text-[11px] font-bold uppercase tracking-wider">
-                            <span>🛡️</span>
-                            <span>Panel Kendali Sistem</span>
-                        </div>
-                        <h1 class="text-2xl sm:text-3xl font-extrabold text-dark-green tracking-tight">
-                            Selamat Datang, {{ $user->name }}
-                        </h1>
-                        <p class="text-sm text-gray-600 max-w-2xl">
-                            Kelola data donasi pakaian, titik posko pengumpulan, dan dokumentasi penyaluran bantuan secara terintegrasi.
-                        </p>
-                    </div>
+            <!-- Metric Cards (Double-Bezel Architecture) -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
 
-                    <div class="flex items-center space-x-3 flex-shrink-0">
-                        <a href="{{ route('donations.index') }}"
-                           class="px-5 py-2.5 bg-dark-green text-white text-xs font-bold rounded-xl hover:bg-sage transition shadow-sm">
-                            Verifikasi Donasi Masuk
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 4 Kartu Metrik Sistem (Bisa Diklik) -->
-                <div class="grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-4">
-                    <a href="{{ route('donations.index') }}" class="block rounded-2xl bg-white p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-dark-green border border-sage/20 transition">
-                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold">
-                            <span>Total Pakaian Masuk</span>
+                <!-- Metric 1: Total Donasi -->
+                <div class="bezel-outer">
+                    <a href="{{ route('donations.index') }}" class="bezel-inner p-6 bg-white block space-y-3 hover:border-forest/20 transition-all duration-300">
+                        <div class="flex items-center justify-between text-xs font-bold text-gray-500 uppercase tracking-wider">
+                            <span>Pakaian Masuk</span>
                             <span class="text-lg">👕</span>
                         </div>
-                        <h3 class="mt-2 text-2xl sm:text-3xl font-black text-dark-green">
-                            {{ $totalDonations }}
+                        <h3 class="text-3xl sm:text-4xl font-extrabold text-forest tracking-tight">
+                            {{ number_format($totalDonations) }}
                         </h3>
-                        <p class="mt-1 text-[11px] text-gray-400">
+                        <p class="text-[11px] text-gray-400 font-semibold">
                             pcs pakaian • Kelola Donasi →
                         </p>
                     </a>
+                </div>
 
-                    <a href="{{ route('admin.distributions.index') }}" class="block rounded-2xl bg-white p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-dark-green border border-sage/20 transition">
-                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold">
-                            <span>Total Pakaian Disalurkan</span>
+                <!-- Metric 2: Total Disalurkan -->
+                <div class="bezel-outer">
+                    <a href="{{ route('admin.distributions.index') }}" class="bezel-inner p-6 bg-white block space-y-3 hover:border-forest/20 transition-all duration-300">
+                        <div class="flex items-center justify-between text-xs font-bold text-gray-500 uppercase tracking-wider">
+                            <span>Pakaian Disalurkan</span>
                             <span class="text-lg">📦</span>
                         </div>
-                        <h3 class="mt-2 text-2xl sm:text-3xl font-black text-dark-green">
-                            {{ $totalDistributedItems }}
+                        <h3 class="text-3xl sm:text-4xl font-extrabold text-forest tracking-tight">
+                            {{ number_format($totalDistributedItems) }}
                         </h3>
-                        <p class="mt-1 text-[11px] text-gray-400">
+                        <p class="text-[11px] text-gray-400 font-semibold">
                             pcs pakaian • Kelola Penyaluran →
                         </p>
                     </a>
+                </div>
 
-                    <a href="{{ route('admin.distributions.index') }}" class="block rounded-2xl bg-white p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-dark-green border border-sage/20 transition">
-                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold">
-                            <span>Kegiatan Penyaluran</span>
+                <!-- Metric 3: Kegiatan Penyaluran -->
+                <div class="bezel-outer">
+                    <a href="{{ route('admin.distributions.index') }}" class="bezel-inner p-6 bg-white block space-y-3 hover:border-forest/20 transition-all duration-300">
+                        <div class="flex items-center justify-between text-xs font-bold text-gray-500 uppercase tracking-wider">
+                            <span>Kegiatan Serah Terima</span>
                             <span class="text-lg">🤝</span>
                         </div>
-                        <h3 class="mt-2 text-2xl sm:text-3xl font-black text-dark-green">
-                            {{ $totalDistributions }}
+                        <h3 class="text-3xl sm:text-4xl font-extrabold text-forest tracking-tight">
+                            {{ number_format($totalDistributions) }}
                         </h3>
-                        <p class="mt-1 text-[11px] text-gray-400">
-                            kegiatan serah terima bantuan
+                        <p class="text-[11px] text-gray-400 font-semibold">
+                            dokumentasi bantuan tersimpan
                         </p>
                     </a>
+                </div>
 
-                    <a href="{{ route('admin.drop-points.index') }}" class="block rounded-2xl bg-white p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-dark-green border border-sage/20 transition">
-                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold">
+                <!-- Metric 4: Posko Aktif -->
+                <div class="bezel-outer">
+                    <a href="{{ route('admin.drop-points.index') }}" class="bezel-inner p-6 bg-white block space-y-3 hover:border-forest/20 transition-all duration-300">
+                        <div class="flex items-center justify-between text-xs font-bold text-gray-500 uppercase tracking-wider">
                             <span>Titik Posko Drop-Off</span>
                             <span class="text-lg">📍</span>
                         </div>
-                        <h3 class="mt-2 text-2xl sm:text-3xl font-black text-dark-green">
-                            {{ $totalDropPoints }}
+                        <h3 class="text-3xl sm:text-4xl font-extrabold text-forest tracking-tight">
+                            {{ number_format($totalDropPoints) }}
                         </h3>
-                        <p class="mt-1 text-[11px] text-gray-400">
-                            lokasi posko aktif • Kelola Posko →
+                        <p class="text-[11px] text-gray-400 font-semibold">
+                            lokasi aktif di database • Kelola Posko →
                         </p>
                     </a>
                 </div>
 
-                <!-- 3 Menu Aksi Utama (1:1 Selaras dengan Navbar) -->
-                <div>
-                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
-                        Modul Pengelolaan Sistem
-                    </h3>
+            </div>
 
-                    <div class="grid gap-6 md:grid-cols-3">
-                        <!-- Modul 1: Afif -->
-                        <div class="rounded-3xl bg-white p-6 shadow-sm border border-sage/30 flex flex-col justify-between border-t-4 border-t-dark-green">
-                            <div>
-                                <span class="text-[11px] font-bold text-dark-green uppercase tracking-wider">Modul Donasi</span>
-                                <h4 class="text-lg font-bold text-dark-green mt-1">Kelola Donasi Pakaian</h4>
-                                <p class="mt-2 text-xs text-gray-600 leading-relaxed">
-                                    Verifikasi pengajuan pakaian dari donatur, ubah status tiket, dan cetak label resi paket.
+            <!-- 3 Modul Kelola Utama (1:1 Selaras dengan Anggota Tim) -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-extrabold text-forest uppercase tracking-wider">
+                        Modul Pengelolaan Sistem
+                    </h2>
+                    <span class="text-xs text-gray-400 font-semibold">Shift A Kelompok 3</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                    <!-- Modul 1: Afif (Donasi Pakaian) -->
+                    <div class="bezel-outer">
+                        <div class="bezel-inner p-7 bg-white flex flex-col justify-between h-full space-y-6">
+                            <div class="space-y-2">
+                                <span class="px-3 py-1 rounded-full bg-forest text-white text-[10px] font-extrabold uppercase tracking-wider">
+                                    Modul Donasi • Afif
+                                </span>
+                                <h3 class="text-xl font-bold text-forest">Kelola Donasi Pakaian</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed font-normal">
+                                    Tinjau berkas foto pakaian yang diajukan donatur, verifikasi status 1-klik, dan terbitkan nomor resi resmi.
                                 </p>
                             </div>
                             <a href="{{ route('donations.index') }}"
-                               class="mt-6 block text-center rounded-xl bg-dark-green px-4 py-2.5 text-xs font-bold text-white hover:bg-sage transition shadow-sm">
-                                Buka Kelola Donasi →
-                            </a>
-                        </div>
-
-                        <!-- Modul 2: Nurul -->
-                        <div class="rounded-3xl bg-white p-6 shadow-sm border border-sage/30 flex flex-col justify-between border-t-4 border-t-sage">
-                            <div>
-                                <span class="text-[11px] font-bold text-sage uppercase tracking-wider">Modul Posko</span>
-                                <h4 class="text-lg font-bold text-dark-green mt-1">Kelola Titik Posko</h4>
-                                <p class="mt-2 text-xs text-gray-600 leading-relaxed">
-                                    Tambah, edit, dan hapus titik posko pengumpulan pakaian drop-off di berbagai kota.
-                                </p>
-                            </div>
-                            <a href="{{ route('admin.drop-points.index') }}"
-                               class="mt-6 block text-center rounded-xl bg-dark-green px-4 py-2.5 text-xs font-bold text-white hover:bg-sage transition shadow-sm">
-                                Buka Kelola Posko →
-                            </a>
-                        </div>
-
-                        <!-- Modul 3: Faizal -->
-                        <div class="rounded-3xl bg-white p-6 shadow-sm border border-sage/30 flex flex-col justify-between border-t-4 border-t-warm-brown">
-                            <div>
-                                <span class="text-[11px] font-bold text-warm-brown uppercase tracking-wider">Modul Penyaluran</span>
-                                <h4 class="text-lg font-bold text-dark-green mt-1">Kelola Penyaluran</h4>
-                                <p class="mt-2 text-xs text-gray-600 leading-relaxed">
-                                    Catat penyerahan baju ke panti/korban bencana dan kelola bukti foto dokumentasi.
-                                </p>
-                            </div>
-                            <a href="{{ route('admin.distributions.index') }}"
-                               class="mt-6 block text-center rounded-xl bg-dark-green px-4 py-2.5 text-xs font-bold text-white hover:bg-sage transition shadow-sm">
-                                Buka Kelola Penyaluran →
+                               class="btn-island bg-forest text-white hover:bg-dark-green w-full justify-between shadow-ambient-sm group">
+                                <span>Buka Kelola Donasi</span>
+                                <span class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-1">→</span>
                             </a>
                         </div>
                     </div>
+
+                    <!-- Modul 2: Nurul (Titik Posko) -->
+                    <div class="bezel-outer">
+                        <div class="bezel-inner p-7 bg-white flex flex-col justify-between h-full space-y-6">
+                            <div class="space-y-2">
+                                <span class="px-3 py-1 rounded-full bg-sage/20 text-forest text-[10px] font-extrabold uppercase tracking-wider border border-sage/30">
+                                    Modul Posko • Nurul
+                                </span>
+                                <h3 class="text-xl font-bold text-forest">Kelola Titik Posko</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed font-normal">
+                                    Tambah posko drop-off baru, perbarui jam operasional, atur kontak PIC WhatsApp, dan tautan Google Maps.
+                                </p>
+                            </div>
+                            <a href="{{ route('admin.drop-points.index') }}"
+                               class="btn-island bg-forest text-white hover:bg-dark-green w-full justify-between shadow-ambient-sm group">
+                                <span>Buka Kelola Posko</span>
+                                <span class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-1">→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Modul 3: Faizal (Penyaluran Bantuan) -->
+                    <div class="bezel-outer">
+                        <div class="bezel-inner p-7 bg-white flex flex-col justify-between h-full space-y-6">
+                            <div class="space-y-2">
+                                <span class="px-3 py-1 rounded-full bg-sand text-warm-brown text-[10px] font-extrabold uppercase tracking-wider">
+                                    Modul Penyaluran • Faizal
+                                </span>
+                                <h3 class="text-xl font-bold text-forest">Kelola Penyaluran</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed font-normal">
+                                    Catat serah terima bantuan ke panti asuhan atau korban bencana lengkap dengan unggahan foto dokumentasi.
+                                </p>
+                            </div>
+                            <a href="{{ route('admin.distributions.index') }}"
+                               class="btn-island bg-forest text-white hover:bg-dark-green w-full justify-between shadow-ambient-sm group">
+                                <span>Buka Penyaluran</span>
+                                <span class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-1">→</span>
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
+            </div>
 
-            {{-- ======================================================== --}}
-            {{-- 2. TAMPILAN KHUSUS DONATUR (PORTAL KEBAIKAN WARGA)       --}}
-            {{-- ======================================================== --}}
-            @else
+        {{-- ======================================================== --}}
+        {{-- 2. DASHBOARD KHUSUS DONATUR (WARM CITIZEN EXPERIENCE)     --}}
+        {{-- ======================================================== --}}
+        @else
 
-                <!-- 1. Hero Card Sambutan Hangat Donatur (High-Contrast & Clean) -->
-                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-sage/30 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <!-- Hero Banner Sambutan Donatur (Double-Bezel) -->
+            <div class="bezel-outer">
+                <div class="bezel-inner p-8 sm:p-10 bg-white flex flex-col md:flex-row md:items-center justify-between gap-8 relative overflow-hidden">
                     <div class="space-y-3 max-w-2xl">
-                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sage/20 text-dark-green text-xs font-bold uppercase tracking-wider">
+                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sage/20 text-forest text-[10px] font-extrabold uppercase tracking-[0.2em] border border-sage/30">
                             <span>🌱</span>
                             <span>Ruang Kebaikan Donatur</span>
                         </div>
-                        <h1 class="text-3xl sm:text-4xl font-black text-dark-green tracking-tight leading-tight">
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-forest tracking-tight leading-tight">
                             Halo, {{ $user->name }}!
-                        </h1>
-                        <p class="text-sm text-gray-600 leading-relaxed">
-                            Punya pakaian bersih di lemari yang sudah jarang dipakai? Jangan biarkan menumpuk. Jadikan pakaian tersebut berkah dan kehangatan baru bagi saudara kita.
+                        </h2>
+                        <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                            Punya pakaian bersih di lemari yang jarang dipakai? Jangan biarkan menumpuk menjadi limbah. Jadikan pakaian tersebut kehangatan baru bagi saudara kita.
                         </p>
-                        <div class="pt-2 flex flex-wrap items-center gap-3">
+                        <div class="pt-2 flex flex-wrap items-center gap-4">
                             <a href="{{ route('donations.create') }}"
-                               class="px-6 py-3 bg-dark-green text-white font-bold text-xs rounded-xl hover:bg-sage transition shadow-sm flex items-center space-x-2">
+                               class="btn-island bg-forest text-white hover:bg-dark-green shadow-ambient-lg group">
                                 <span>👕 Donasikan Pakaian Sekarang</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
+                                <span class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-500 ease-luxury group-hover:translate-x-0.5">
+                                    +
+                                </span>
                             </a>
                             <a href="{{ route('donations.index') }}"
-                               class="px-5 py-3 bg-cream border border-warm-brown/40 text-warm-brown font-bold text-xs rounded-xl hover:bg-warm-brown hover:text-white transition">
+                               class="inline-flex items-center px-6 py-3 rounded-full bg-cream hover:bg-sand border border-black/5 text-xs font-bold text-forest transition shadow-2xs">
                                 Riwayat Donasi Saya
                             </a>
                         </div>
                     </div>
 
-                    <!-- Visual Accent Logo -->
-                    <div class="hidden sm:flex w-24 h-24 rounded-2xl bg-cream/60 border border-sage/30 items-center justify-center p-3 flex-shrink-0">
+                    <div class="hidden sm:flex w-28 h-28 rounded-full bg-sand/60 p-2 flex-shrink-0 items-center justify-center border border-black/5">
                         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-full h-full object-contain">
                     </div>
                 </div>
+            </div>
 
-                <!-- 2. Ringkasan Kontribusi & Widget Lacak Resi -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Bento Row: Ringkasan Kontribusi & Widget Lacak Resi -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                    <!-- Kartu Ringkasan Kontribusi Donatur -->
-                    <div class="bg-white rounded-3xl p-6 border border-sage/30 shadow-sm flex flex-col justify-between space-y-4">
+                <!-- Kontribusi Card (Col 5) -->
+                <div class="lg:col-span-5 bezel-outer">
+                    <div class="bezel-inner p-7 bg-white flex flex-col justify-between h-full space-y-6">
                         <div>
-                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider block">Kontribusi Kebaikan Anda</span>
-                            <div class="flex items-baseline space-x-2 mt-2">
-                                <span class="text-4xl font-black text-dark-green">{{ $myTotalItems }}</span>
-                                <span class="text-sm font-bold text-gray-600">Potong Pakaian</span>
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 block">
+                                Dampak Kebaikan Anda
+                            </span>
+                            <div class="flex items-baseline gap-2 mt-2">
+                                <span class="text-4xl sm:text-5xl font-black text-forest tracking-tight">{{ $myTotalItems }}</span>
+                                <span class="text-sm font-bold text-gray-500">Pcs Pakaian</span>
                             </div>
-                            <p class="text-xs text-gray-500 mt-1">
-                                Total pakaian yang telah Anda ajukan melalui akun ini.
-                            </p>
+                            <p class="text-xs text-gray-400 mt-1">Total potong pakaian yang telah diajukan.</p>
                         </div>
 
-                        <!-- Progress Mini Status -->
-                        <div class="pt-3 border-t border-gray-100 grid grid-cols-3 gap-2 text-center">
-                            <div class="p-2 rounded-xl bg-amber-100/70 border border-amber-200">
-                                <span class="block text-xl font-black text-amber-800">{{ $myPending }}</span>
-                                <span class="text-[10px] text-amber-900 font-bold uppercase tracking-wider">Menunggu</span>
+                        <!-- Mini Status Pills -->
+                        <div class="grid grid-cols-3 gap-2.5 pt-4 border-t border-black/[0.04]">
+                            <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200/60 text-center space-y-0.5">
+                                <span class="block text-xl font-black text-amber-700">{{ $myPending }}</span>
+                                <span class="text-[9px] font-bold text-amber-900 uppercase">Menunggu</span>
                             </div>
-                            <div class="p-2 rounded-xl bg-blue-100/70 border border-blue-200">
-                                <span class="block text-xl font-black text-blue-800">{{ $myVerified }}</span>
-                                <span class="text-[10px] text-blue-900 font-bold uppercase tracking-wider">Di Posko</span>
+                            <div class="p-3 rounded-2xl bg-blue-50 border border-blue-200/60 text-center space-y-0.5">
+                                <span class="block text-xl font-black text-blue-700">{{ $myVerified }}</span>
+                                <span class="text-[9px] font-bold text-blue-900 uppercase">Di Posko</span>
                             </div>
-                            <div class="p-2 rounded-xl bg-emerald-100/70 border border-emerald-200">
-                                <span class="block text-xl font-black text-emerald-800">{{ $myDistributed }}</span>
-                                <span class="text-[10px] text-emerald-900 font-bold uppercase tracking-wider">Tersalurkan</span>
+                            <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200/60 text-center space-y-0.5">
+                                <span class="block text-xl font-black text-emerald-700">{{ $myDistributed }}</span>
+                                <span class="text-[9px] font-bold text-emerald-900 uppercase">Tersalurkan</span>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Widget Lacak Nomor Resi Cepat -->
-                    <div class="lg:col-span-2 bg-white rounded-3xl p-6 border border-sage/30 shadow-sm flex flex-col justify-between space-y-4">
-                        <div>
-                            <span class="text-xs font-bold text-warm-brown uppercase tracking-wider block">Pelacakan Paket Mandiri</span>
-                            <h3 class="text-lg font-bold text-dark-green mt-1">Lacak Status Paket Donasi Anda</h3>
-                            <p class="text-xs text-gray-600 mt-1">
-                                Ingin tahu paket pakaian Anda sudah sampai di posko atau disalurkan? Masukkan kode tracking resi Anda di sini:
+                <!-- Widget Lacak Cepat (Col 7) -->
+                <div class="lg:col-span-7 bezel-outer">
+                    <div class="bezel-inner p-7 bg-white flex flex-col justify-between h-full space-y-6">
+                        <div class="space-y-1">
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-warm-brown block">
+                                Pelacakan Resi Cepat
+                            </span>
+                            <h3 class="text-xl font-bold text-forest">Lacak Paket Pakaian Donasi Anda</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">
+                                Ingin tahu perjalanan baju Anda? Masukkan nomor resi paket untuk melihat timeline verifikasi dan penyaluran langsung.
                             </p>
                         </div>
 
@@ -244,80 +279,41 @@
                                 <input type="text"
                                        name="code"
                                        required
-                                       placeholder="Contoh: DON-20261006-XXXX"
-                                       class="w-full text-sm font-mono font-bold text-dark-green uppercase ps-10 pe-4 py-2.5 rounded-xl border-gray-300 focus:border-sage focus:ring focus:ring-sage/20 transition">
-                                <span class="absolute start-3 top-2.5 text-sm text-gray-400">🏷️</span>
+                                       placeholder="Contoh: DON-{{ date('Ymd') }}-XXXX"
+                                       class="w-full text-xs font-mono font-bold text-forest uppercase ps-10 pe-4 py-3 rounded-2xl border-gray-200 focus:border-sage focus:ring focus:ring-sage/20 transition">
+                                <span class="absolute start-3.5 top-3 text-sm text-gray-400">🏷️</span>
                             </div>
                             <button type="submit"
-                                    class="px-5 py-2.5 bg-dark-green text-white text-xs font-bold rounded-xl hover:bg-sage transition shadow-sm flex items-center justify-center space-x-1.5 flex-shrink-0">
-                                <span>Cek Status</span>
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
+                                    class="btn-island bg-forest text-white hover:bg-dark-green shadow-ambient-sm justify-center">
+                                <span>Cek Status Resi</span>
+                                <span class="text-xs">🔍</span>
                             </button>
                         </form>
                     </div>
-
                 </div>
 
-                <!-- 3. Alur 4 Langkah Donasi (Panduan Praktis) -->
-                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-sage/30 shadow-sm space-y-4">
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <div>
-                            <h3 class="font-bold text-dark-green text-base">Panduan Cara Donasi</h3>
-                            <p class="text-xs text-gray-500">Hanya butuh 4 langkah mudah untuk menyelesaikan proses donasi.</p>
-                        </div>
-                        <a href="{{ route('donations.create') }}" class="text-xs font-bold text-dark-green hover:underline">
-                            Mulai Donasi →
-                        </a>
-                    </div>
+            </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-                        <div class="p-4 rounded-2xl bg-cream/30 border border-sage/20 space-y-2">
-                            <span class="w-7 h-7 rounded-lg bg-sage/30 text-dark-green font-black text-xs flex items-center justify-center">1</span>
-                            <h4 class="font-bold text-xs text-gray-800">Pilih & Cuci Bersih</h4>
-                            <p class="text-[11px] text-gray-500 leading-relaxed">Pastikan pakaian bekas masih layak pakai, tidak sobek parah, dan bersih.</p>
-                        </div>
+            <!-- Riwayat Donasi Terakhir & Shortcut Posko -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                        <div class="p-4 rounded-2xl bg-cream/30 border border-sage/20 space-y-2">
-                            <span class="w-7 h-7 rounded-lg bg-sage/30 text-dark-green font-black text-xs flex items-center justify-center">2</span>
-                            <h4 class="font-bold text-xs text-gray-800">Isi Formulir Online</h4>
-                            <p class="text-[11px] text-gray-500 leading-relaxed">Klik tombol donasi, masukkan jumlah potong dan dapatkan nomor resi unik.</p>
-                        </div>
-
-                        <div class="p-4 rounded-2xl bg-cream/30 border border-sage/20 space-y-2">
-                            <span class="w-7 h-7 rounded-lg bg-sage/30 text-dark-green font-black text-xs flex items-center justify-center">3</span>
-                            <h4 class="font-bold text-xs text-gray-800">Cetak / Tulis Resi</h4>
-                            <p class="text-[11px] text-gray-500 leading-relaxed">Tempelkan label resi di kardus atau plastik paket pakaian Anda.</p>
-                        </div>
-
-                        <div class="p-4 rounded-2xl bg-cream/30 border border-sage/20 space-y-2">
-                            <span class="w-7 h-7 rounded-lg bg-sage/30 text-dark-green font-black text-xs flex items-center justify-center">4</span>
-                            <h4 class="font-bold text-xs text-gray-800">Serahkan ke Posko</h4>
-                            <p class="text-[11px] text-gray-500 leading-relaxed">Antar langsung ke titik posko terdekat atau kirim via ekspedisi kurir.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Paket Donasi Aktif & Informasi Posko -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                    <!-- Riwayat Donasi Terakhir Kamu -->
-                    <div class="lg:col-span-2 bg-white rounded-3xl p-6 border border-sage/30 shadow-sm space-y-4">
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                            <h3 class="font-bold text-dark-green text-base">Donasi Pakaian Terakhir Anda</h3>
-                            <a href="{{ route('donations.index') }}" class="text-xs font-semibold text-warm-brown hover:text-dark-green transition">
+                <!-- Riwayat Terakhir (Col 8) -->
+                <div class="lg:col-span-8 bezel-outer">
+                    <div class="bezel-inner p-7 bg-white space-y-5 h-full">
+                        <div class="flex items-center justify-between border-b border-black/[0.04] pb-4">
+                            <h3 class="text-base font-bold text-forest">Riwayat Donasi Pakaian Terakhir</h3>
+                            <a href="{{ route('donations.index') }}" class="text-xs font-bold text-warm-brown hover:text-forest transition">
                                 Buka Semua ({{ $myDonations->count() }}) →
                             </a>
                         </div>
 
                         @if ($myDonations->count() > 0)
-                            <div class="divide-y divide-gray-100 text-sm">
+                            <div class="divide-y divide-black/[0.04]">
                                 @foreach ($myDonations as $donation)
-                                    <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                    <div class="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                         <div class="space-y-1">
                                             <div class="flex items-center space-x-2">
-                                                <span class="font-mono font-bold text-xs text-dark-green bg-cream px-2 py-0.5 rounded border border-sage/30">
+                                                <span class="font-mono font-bold text-xs text-forest bg-cream px-2.5 py-0.5 rounded-lg border border-sand">
                                                     {{ $donation->tracking_code }}
                                                 </span>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border {{ $donation->status_badge_class }}">
@@ -325,22 +321,22 @@
                                                 </span>
                                             </div>
                                             <p class="text-xs text-gray-800 font-bold">
-                                                {{ $donation->clothing_type }} • <span class="text-dark-green font-black">{{ $donation->quantity }} Pcs</span> ({{ $donation->condition_label }})
+                                                {{ $donation->clothing_type }} • <span class="text-forest font-black">{{ $donation->quantity }} Pcs</span> ({{ $donation->condition_label }})
                                             </p>
                                             <p class="text-[11px] text-gray-400">
-                                                Metode: {{ $donation->delivery_method_label }} • Diajukan {{ $donation->created_at->format('d M Y') }}
+                                                Metode: {{ $donation->delivery_method_label }} • {{ $donation->created_at->format('d M Y') }}
                                             </p>
                                         </div>
 
                                         <div class="flex items-center space-x-2">
                                             <a href="{{ route('donations.show', $donation) }}"
-                                               class="px-3 py-1.5 rounded-xl bg-sage/20 text-dark-green text-xs font-bold hover:bg-dark-green hover:text-white transition">
-                                                Lihat Tracking
+                                               class="px-3.5 py-1.5 rounded-full bg-sage/20 text-forest text-xs font-bold hover:bg-forest hover:text-white transition">
+                                                Detail
                                             </a>
                                             <a href="{{ route('donations.print', $donation) }}"
                                                target="_blank"
-                                               class="px-3 py-1.5 rounded-xl border border-warm-brown/40 text-warm-brown text-xs font-bold hover:bg-warm-brown hover:text-white transition">
-                                                Cetak Resi
+                                               class="px-3.5 py-1.5 rounded-full border border-warm-brown/40 text-warm-brown text-xs font-bold hover:bg-warm-brown hover:text-white transition">
+                                                Cetak Label
                                             </a>
                                         </div>
                                     </div>
@@ -348,52 +344,57 @@
                             </div>
                         @else
                             <div class="py-12 text-center space-y-3">
-                                <span class="text-5xl block">📦</span>
-                                <h4 class="font-bold text-dark-green text-sm">Belum Ada Riwayat Donasi</h4>
+                                <span class="text-4xl block">📦</span>
+                                <h4 class="font-bold text-forest text-sm">Belum Ada Donasi Pakaian</h4>
                                 <p class="text-xs text-gray-500 max-w-sm mx-auto">
-                                    Anda belum pernah mengajukan pakaian. Mari salurkan pakaian layak pakai Anda hari ini untuk membantu sesama.
+                                    Mulai langkah kebaikan Anda hari ini dengan mendonasikan pakaian layak pakai pertama.
                                 </p>
                                 <a href="{{ route('donations.create') }}"
-                                   class="inline-block mt-2 px-6 py-2.5 bg-dark-green text-white text-xs font-bold rounded-xl hover:bg-sage transition shadow-sm">
-                                    Ajukan Donasi Sekarang
+                                   class="btn-island bg-forest text-white hover:bg-dark-green mt-2 shadow-ambient-sm">
+                                    <span>Ajukan Donasi Sekarang</span>
+                                    <span>+</span>
                                 </a>
                             </div>
                         @endif
                     </div>
+                </div>
 
-                    <!-- Kartu Panduan & Posko Terdekat -->
-                    <div class="space-y-6">
-                        <!-- Card Cari Posko -->
-                        <div class="bg-white rounded-3xl p-6 border border-sage/30 shadow-sm space-y-3">
-                            <span class="text-2xl">📍</span>
-                            <h4 class="font-bold text-dark-green text-base">Antar Langsung ke Posko?</h4>
-                            <p class="text-xs text-gray-600 leading-relaxed">
-                                Temukan titik posko pengumpulan Lemari Peduli di kotamu beserta kontak WhatsApp petugas untuk jadwal serah terima.
+                <!-- Shortcut Posko & Transparansi (Col 4) -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bezel-outer">
+                        <div class="bezel-inner p-6 bg-white space-y-3">
+                            <span class="text-2xl block">📍</span>
+                            <h4 class="font-bold text-forest text-base">Antar Langsung ke Posko</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed font-normal">
+                                Cari posko drop-off terdekat di kotamu dan kontak petugas untuk jadwal penyerahan.
                             </p>
                             <a href="{{ route('posko.public') }}"
-                               class="inline-block w-full text-center py-2.5 rounded-xl bg-sage/20 text-dark-green text-xs font-bold hover:bg-dark-green hover:text-white transition">
-                                Buka Lokasi Posko →
-                            </a>
-                        </div>
-
-                        <!-- Card Transparansi Penyaluran -->
-                        <div class="bg-white rounded-3xl p-6 border border-sage/30 shadow-sm space-y-3">
-                            <span class="text-2xl">🤝</span>
-                            <h4 class="font-bold text-dark-green text-base">Transparansi Bantuan</h4>
-                            <p class="text-xs text-gray-600 leading-relaxed">
-                                Bukti dokumentasi dan foto serah terima pakaian kepada panti asuhan, korban bencana, dan warga prasejahtera.
-                            </p>
-                            <a href="{{ route('laporan.public') }}"
-                               class="inline-block w-full text-center py-2.5 rounded-xl border border-warm-brown text-warm-brown text-xs font-bold hover:bg-warm-brown hover:text-white transition">
-                                Buka Galeri Penyaluran →
+                               class="btn-island bg-sand/60 text-forest hover:bg-sand w-full justify-between mt-2 border border-black/5">
+                                <span>Buka Daftar Posko</span>
+                                <span>→</span>
                             </a>
                         </div>
                     </div>
 
+                    <div class="bezel-outer">
+                        <div class="bezel-inner p-6 bg-white space-y-3">
+                            <span class="text-2xl block">🤝</span>
+                            <h4 class="font-bold text-forest text-base">Transparansi Bantuan</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed font-normal">
+                                Dokumentasi foto penyerahan pakaian kepada panti asuhan dan warga prasejahtera.
+                            </p>
+                            <a href="{{ route('laporan.public') }}"
+                               class="btn-island bg-sand/60 text-forest hover:bg-sand w-full justify-between mt-2 border border-black/5">
+                                <span>Lihat Laporan Penyaluran</span>
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
-            @endif
+            </div>
 
-        </div>
+        @endif
+
     </div>
 </x-app-layout>

@@ -132,8 +132,9 @@
                 </form>
             </div>
 
-            <!-- Tabel Data Donasi -->
-            <div class="bg-white rounded-2xl border border-sage/30 shadow-sm overflow-hidden">
+            <!-- Tabel Data Donasi (Double-Bezel Architecture) -->
+            <div class="bezel-outer">
+                <div class="bezel-inner overflow-hidden bg-white">
                 @if ($donations->count() > 0)
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
@@ -325,6 +326,7 @@
                         </div>
                     </div>
                 @endif
+                </div>
             </div>
 
         </div>
